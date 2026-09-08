@@ -1,0 +1,170 @@
+<?php
+
+namespace App\Libraries;
+
+class IvosightsService
+{
+    private $token;
+
+    public function __construct()
+    {
+        $this->token = env('FONNTE_TOKEN', '');
+    }
+
+    /**
+     * Send OTP via Fonnte WhatsApp
+     */
+    public function sendOtp(string $phone, string $otp)
+    {
+        $phone   = $this->formatPhone($phone);
+        $message = "Kode OTP Almai Anda adalah: *{$otp}*\n\nKode berlaku 10 menit. \n\nwww.almai.id.\n\n*Almai* 🇮🇩";
+
+        return $this->sendFonnte($phone, $message);
+    }
+
+    /**
+     * Send Registration Success Notification
+     */
+public function sendRegistrationSuccess($phone, $name, $email, $affiliator = '-', $affiliatorType = 'Referral', $bonusRegister = '0', $bonusReferral = '0')
+  
+    {
+        $phone   = $this->formatPhone($phone);
+        $message  = "✅ *Registrasi Berhasil!*\n\n";
+        $message .= "Tanggal   : " . date('d M Y H:i') . "\n";
+        $message .= "Nama      : {$name}\n";
+        $message .= "No. HP    : {$phone}\n";
+        $message .= "Email     : {$email}\n";
+        $message .= "{$affiliatorType} : {$affiliator}\n";
+
+
+        if ($bonusRegister > 0) {
+            $message .= "Bonus Register : {$bonusRegister} poin\n";
+        }
+        if ($bonusReferral > 0) {
+            $message .= "Bonus Referral : {$bonusReferral} poin\n";
+        }
+
+        $message .= "\nSelamat bergabung di *Almai | Platform Resmi Penasihat Perdagangan Derivatif & Aset Keuangan Digital* 🇮🇩";
+
+        return $this->sendFonnte($phone, $message);
+    }
+
+    /**
+     * Send Account Created Notification (Admin Created Users)
+     */
+    public function sendAccountCreatedNotification($phone, $name, $programName = 'WPA')
+    {
+        $phone   = $this->formatPhone($phone);
+        $message  = "✅ *Akun Berhasil Dibuat*\n\n";
+        $message .= "Halo *{$name}*,\n";
+        $message .= "Akun Anda untuk program *{$programName}* Selamat Bergabung di Almai.\n\n";
+        $message .= "Silakan login di *almai.id* untuk memulai.\n\n";
+        $message .= "*Almai* 🇮🇩";
+
+        return $this->sendFonnte($phone, $message);
+    }
+
+    /**
+     * Send Purchase Notification to CS
+     */
+    public function sendPurchaseNotificationToCS($customerName, $status, $productName, $totalPayment, $productLink, $customerPhone)
+    {
+        $csNumber = env('IVOSIGHTS_CS_NUMBER', '6285183390019');
+        $csNumber = preg_replace('/[^0-9]/', '', $csNumber);
+
+        $message  = "🛒 *Notifikasi Pembelian*\n\n";
+        $message .= "Nama   : {$customerName}\n";
+        $message .= "Status : {$status}\n";
+        $message .= "Produk : {$productName}\n";
+        $message .= "Total  : {$totalPayment}\n";
+        $message .= "WA     : {$customerPhone}\n";
+        $message .= "Link   : {$productLink}";
+
+        return $this->sendFonnte($csNumber, $message);
+    }
+
+    /**
+     * Send EA License Expired Notification
+     */
+    public function sendLicenseExpiredNotification($phone, $customerName)
+    {
+        $phone   = $this->formatPhone($phone);
+        $message  = "⚠️ *Notifikasi Lisensi*\n\n";
+        $message .= "Halo *{$customerName}*,\n\n";
+        $message .= "Lisensi EA Anda telah *kadaluarsa*. Segera perbarui untuk tetap bisa menggunakan layanan.\n\n";
+        $message .= "Hubungi CS kami untuk informasi perpanjangan.\n\n";
+        $message .= "*Almai* 🇮🇩";
+
+        return $this->sendFonnte($phone, $message);
+    }
+
+    /**
+     * Send Invoice Notification to Customer
+     */
+    public function sendInvoiceToCustomer($phone, $customerName, $status, $productName, $totalPayment, $invoiceLink)
+    {
+        $phone   = $this->formatPhone($phone);
+        $message  = "🧾 *Invoice Pembelian*\n\n";
+        $message .= "Halo *{$customerName}*,\n\n";
+        $message .= "Status  : {$status}\n";
+        $message .= "Produk  : {$productName}\n";
+        $message .= "Total   : {$totalPayment}\n";
+        $message .= "Invoice : {$invoiceLink}\n\n";
+        $message .= "Terima kasih telah berbelanja di *Almai* 🇮🇩";
+
+        return $this->sendFonnte($phone, $message);
+    }
+
+    /**
+     * Core method: kirim pesan via Fonnte
+     */
+    private function sendFonnte(string $phone, string $message)
+    {
+        $ch = curl_init('https://api.fonnte.com/send');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => [
+                'target'      => $phone,
+                'message'     => $message,
+                'countryCode' => '62',
+            ],
+            CURLOPT_HTTPHEADER     => ['Authorization: ' . $this->token],
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_TIMEOUT        => 15,
+        ]);
+
+        $result   = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (curl_errno($ch)) {
+            log_message('error', 'Fonnte Curl Error: ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+
+        $response = json_decode($result, true);
+        log_message('debug', 'Fonnte Response (' . $phone . '): ' . $result);
+
+        if (isset($response['status']) && $response['status'] === true) {
+            return ['success' => true, 'data' => $response];
+        }
+
+        return ['success' => false, 'message' => $response['reason'] ?? $result];
+    }
+
+    private function formatPhone($phone)
+    {
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        if (!str_starts_with($phone, '62')) {
+            $phone = '62' . $phone;
+        }
+
+        return $phone;
+    }
+}

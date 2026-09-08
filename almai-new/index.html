@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALMAI Portal - Master Dashboard Launcher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#33e818'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .bg-grid {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative bg-grid flex flex-col justify-between p-4 md:p-8">
+
+    <!-- Ambient Glow -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-accent/15 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="max-w-6xl w-full mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 py-4 border-b border-white/10 relative z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-accent/20 border border-accent/40 rounded-xl flex items-center justify-center text-accent font-black text-xl shadow-[0_0_15px_rgba(51,232,24,0.3)]">
+                A
+            </div>
+            <div>
+                <h1 class="font-extrabold text-lg text-white tracking-tight">ALMAI MASTER PORTAL</h1>
+                <p class="text-xs text-gray-400">Quick Dashboard Launcher & Navigation Hub</p>
+            </div>
+        </div>
+
+        <!-- Port Control & Status -->
+        <div class="flex flex-wrap items-center gap-2 bg-[#111] p-1.5 rounded-2xl border border-white/10">
+            <div class="flex items-center gap-1.5 px-3 py-1 bg-black/50 rounded-xl border border-white/5 text-xs text-gray-400">
+                <i class="fas fa-network-wired text-accent"></i>
+                <span>Port:</span>
+                <input type="text" id="portInput" value="8080" class="w-14 bg-white/10 border border-white/20 rounded px-1.5 py-0.5 text-center text-white font-mono font-bold focus:outline-none focus:border-accent text-xs" onchange="updateBasePort(this.value)">
+            </div>
+            <span id="serverStatusBadge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30">
+                <i class="fas fa-check-circle"></i> Localhost (Port 8080)
+            </span>
+            <button onclick="checkLocalServer()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold text-white transition flex items-center gap-1.5" title="Cek Status Server">
+                <i class="fas fa-sync-alt text-accent"></i> Cek Server
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Navigation Cards -->
+    <main class="max-w-6xl w-full mx-auto my-8 relative z-10 space-y-8">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-[#111] via-[#161616] to-[#111] border border-white/10 rounded-2xl p-6 md:p-8 relative overflow-hidden">
+            <div class="relative z-10 max-w-3xl">
+                <span class="px-3 py-1 bg-accent/20 text-accent font-bold text-xs rounded-full border border-accent/30 mb-3 inline-block">SYSTEM NAVIGATION HUB</span>
+                <h2 class="text-2xl md:text-3xl font-black text-white mb-2">Pilih Halaman & Dashboard ALMAI</h2>
+                <p class="text-gray-400 text-xs md:text-sm leading-relaxed mb-6">
+                    Akses cepat ke seluruh modul dashboard Superadmin, User, WPA, CWPA, Finance, serta Halaman Publik & Absensi Check-in. Target URL aktif: <code id="activeBaseUrlDisplay" class="text-accent font-mono bg-accent/10 px-2 py-0.5 rounded border border-accent/30">http://localhost:8080</code>
+                </p>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="http://localhost:8080/" data-path="/" target="_blank" class="localhost-link px-4 py-2.5 bg-accent text-black font-bold text-xs rounded-xl hover:bg-white hover:scale-105 transition flex items-center gap-2 shadow-lg shadow-accent/20">
+                        <i class="fas fa-home"></i> Buka Beranda Publik (Local)
+                    </a>
+                    <a href="http://localhost:8080/login" data-path="/login" target="_blank" class="localhost-link px-4 py-2.5 bg-white/10 text-white font-bold text-xs rounded-xl hover:bg-white/20 transition flex items-center gap-2 border border-white/10">
+                        <i class="fas fa-sign-in-alt"></i> Login User
+                    </a>
+                    <a href="http://localhost:8080/admin/login" data-path="/admin/login" target="_blank" class="localhost-link px-4 py-2.5 bg-white/10 text-white font-bold text-xs rounded-xl hover:bg-white/20 transition flex items-center gap-2 border border-white/10">
+                        <i class="fas fa-user-shield"></i> Login Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <!-- 1. Superadmin Dashboard -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-user-shield text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-purple-400 transition">Superadmin Dashboard</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Manajemen pengguna, kelola event absensi, verifikasi transaksi, audit log, dan WhatsApp Gateway.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/superadmin/dashboard" data-path="/superadmin/dashboard" target="_blank" class="localhost-link w-full py-2.5 bg-purple-500/20 text-purple-300 hover:bg-purple-500 hover:text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-purple-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/superadmin/dashboard" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 2. User Dashboard -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-accent/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-users text-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-accent transition">User Dashboard</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Dompet poin reward, riwayat check-in event, klaim bonus harian, layanan belajar kelas, & RWA Bot.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/user/dashboard" data-path="/user/dashboard" target="_blank" class="localhost-link w-full py-2.5 bg-accent text-black hover:bg-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-accent/20">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/user/dashboard" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3. Halaman Absensi Check-in -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-green-400/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-clipboard-check text-green-400 text-xl"></i>
+                    </div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h3 class="text-lg font-bold text-white group-hover:text-green-400 transition">Check-in Absensi</h3>
+                        <span class="px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] font-bold rounded-full border border-green-500/30">Event QR</span>
+                    </div>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Halaman check-in peserta webinar/seminar dengan banner poster acara dan reward +100 Poin.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/absensi/checkin/DEMO_QR" data-path="/absensi/checkin/DEMO_QR" target="_blank" class="localhost-link w-full py-2.5 bg-green-500/20 text-green-300 hover:bg-green-500 hover:text-black font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-green-500/30">
+                        <i class="fas fa-qrcode"></i> Buka Check-in (Demo/QR)
+                    </a>
+                    <a href="http://localhost:8080/superadmin/absensi" data-path="/superadmin/absensi" target="_blank" class="localhost-link w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-list"></i> Kelola Absensi di Superadmin
+                    </a>
+                </div>
+            </div>
+
+            <!-- 4. WPA Dashboard -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-blue-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-user-tie text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-blue-400 transition">WPA Dashboard</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Dashboard Wakil Penasihat Berjangka: kelola event, buat QR absensi, publikasi sinyal & artikel.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/wpa/dashboard" data-path="/wpa/dashboard" target="_blank" class="localhost-link w-full py-2.5 bg-blue-500/20 text-blue-300 hover:bg-blue-500 hover:text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-blue-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/wpa/dashboard" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 5. CWPA Dashboard -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-user-graduate text-cyan-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-cyan-400 transition">CWPA Dashboard</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Dashboard Calon WPA: progres kualifikasi sertifikasi, kelola absensi kegiatan, & materi pembelajaran.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/cwpa/dashboard" data-path="/cwpa/dashboard" target="_blank" class="localhost-link w-full py-2.5 bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500 hover:text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-cyan-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/cwpa/dashboard" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 6. Finance & Accounting Dashboard -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-emerald-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-wallet text-emerald-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-emerald-400 transition">Finance & Accounting</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Modul Keuangan & ERP: Jurnal umum, neraca saldo, laba rugi, kas bank, & invoice tagihan.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/keuangan/dashboard" data-path="/keuangan/dashboard" target="_blank" class="localhost-link w-full py-2.5 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500 hover:text-black font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-emerald-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/keuangan/dashboard" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 7. Partnership & Laporan Kegiatan -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-orange-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-handshake text-orange-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition">Partnership / Laporan Kegiatan</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Data kemitraan, arsip laporan kegiatan Bank Indonesia & Bappebti, data perusahaan, & pedoman perilaku.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/laporan-kegiatan" data-path="/laporan-kegiatan" target="_blank" class="localhost-link w-full py-2.5 bg-orange-500/20 text-orange-300 hover:bg-orange-500 hover:text-black font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-orange-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/laporan-kegiatan" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 8. Customer Support & Advokasi -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-rose-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-rose-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-headset text-rose-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-rose-400 transition">Customer Support & Advokasi</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Pengaduan advokasi trading, kelola tiket kendala pengguna, chat leads, & ulasan feedback.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/superadmin/advokasi" data-path="/superadmin/advokasi" target="_blank" class="localhost-link w-full py-2.5 bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-rose-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/superadmin/advokasi" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+            <!-- 9. Dashboard IT & Pengaturan Sistem -->
+            <div class="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-indigo-500/50 transition duration-300 group flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-server text-indigo-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-indigo-400 transition">Dashboard IT & System</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
+                        Konfigurasi WhatsApp Gateway, pengaturan bot SSO, manajemen lisensi EA, & pembersihan cache.
+                    </p>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-white/5">
+                    <a href="http://localhost:8080/superadmin/setting" data-path="/superadmin/setting" target="_blank" class="localhost-link w-full py-2.5 bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500 hover:text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 border border-indigo-500/30">
+                        <i class="fas fa-desktop"></i> Open Localhost
+                    </a>
+                    <a href="https://almai.id/superadmin/setting" target="_blank" class="w-full py-2 bg-white/5 text-gray-400 hover:text-white font-semibold rounded-xl text-[11px] transition flex items-center justify-center gap-1.5">
+                        <i class="fas fa-globe"></i> Open Live cPanel
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Public Pages Quick Navigation Strip -->
+        <div class="bg-[#111] border border-white/10 rounded-2xl p-6 space-y-4">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+                <i class="fas fa-compass text-accent"></i> Halaman Publik & Fitur Utama Lainnya:
+            </h4>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs">
+                <a href="http://localhost:8080/layanan" data-path="/layanan" target="_blank" class="localhost-link p-2.5 bg-white/5 hover:bg-accent hover:text-black font-semibold rounded-xl transition text-center border border-white/5">
+                    <i class="fas fa-cube block mb-1 text-sm"></i> Layanan
+                </a>
+                <a href="http://localhost:8080/event" data-path="/event" target="_blank" class="localhost-link p-2.5 bg-white/5 hover:bg-accent hover:text-black font-semibold rounded-xl transition text-center border border-white/5">
+                    <i class="fas fa-calendar-alt block mb-1 text-sm"></i> Event
+                </a>
+                <a href="http://localhost:8080/signal" data-path="/signal" target="_blank" class="localhost-link p-2.5 bg-white/5 hover:bg-accent hover:text-black font-semibold rounded-xl transition text-center border border-white/5">
+                    <i class="fas fa-bolt block mb-1 text-sm"></i> Signal Plus500
+                </a>
+                <a href="http://localhost:8080/advokasi" data-path="/advokasi" target="_blank" class="localhost-link p-2.5 bg-white/5 hover:bg-accent hover:text-black font-semibold rounded-xl transition text-center border border-white/5">
+                    <i class="fas fa-shield-alt block mb-1 text-sm"></i> Advokasi
+                </a>
+                <a href="http://localhost:8080/kalender-ekonomi" data-path="/kalender-ekonomi" target="_blank" class="localhost-link p-2.5 bg-white/5 hover:bg-accent hover:text-black font-semibold rounded-xl transition text-center border border-white/5">
+                    <i class="fas fa-chart-bar block mb-1 text-sm"></i> Kalender Ekonomi
+                </a>
+                <a href="http://localhost:8080/glosarium" data-path="/glosarium" target="_blank" class="localhost-link p-2.5 bg-white/5 hover:bg-accent hover:text-black font-semibold rounded-xl transition text-center border border-white/5">
+                    <i class="fas fa-book block mb-1 text-sm"></i> Glosarium
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Troubleshoot & Start Server Section -->
+        <div class="bg-[#111] border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 shrink-0 mt-1">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-white">Panduan Menyalakan Localhost</h4>
+                    <p class="text-xs text-gray-400 mt-1">
+                        Jalankan file <span class="text-accent font-semibold">JALANKAN_LOCAL_WORKSPACE.bat</span> atau buka Terminal di folder project lalu ketik: <code class="bg-black px-2 py-1 rounded text-accent font-mono text-xs">php spark serve</code>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="http://localhost:8080/register" data-path="/register" target="_blank" class="localhost-link px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition border border-white/20 flex items-center gap-1.5">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+                <a href="http://localhost:8080/login" data-path="/login" target="_blank" class="localhost-link px-4 py-2.5 bg-accent text-black font-bold text-xs rounded-xl hover:bg-white transition flex items-center gap-1.5">
+                    <i class="fas fa-key"></i> Login
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-6xl w-full mx-auto py-4 border-t border-white/10 text-center text-xs text-gray-500 relative z-10">
+        &copy; 2026 ALMAI Project Master Navigation Portal • CodeIgniter 4 Architecture
+    </footer>
+
+    <script>
+        let currentPort = "8080";
+
+        function updateBasePort(port) {
+            currentPort = (port || "8080").toString().trim();
+            const baseUrl = `http://localhost:${currentPort}`;
+            
+            const portInput = document.getElementById('portInput');
+            if (portInput) portInput.value = currentPort;
+            
+            const display = document.getElementById('activeBaseUrlDisplay');
+            if (display) display.innerText = baseUrl;
+
+            // Update all localhost links dynamically
+            document.querySelectorAll('.localhost-link').forEach(el => {
+                const path = el.getAttribute('data-path') || '/';
+                el.href = `${baseUrl}${path.startsWith('/') ? path : '/' + path}`;
+            });
+        }
+
+        async function checkLocalServer() {
+            const badge = document.getElementById('serverStatusBadge');
+            badge.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-yellow-500/20 text-yellow-400 text-xs font-bold border border-yellow-500/30';
+            badge.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Cek Port ${currentPort}...`;
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1000);
+                await fetch(`http://localhost:${currentPort}/`, { mode: 'no-cors', signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                badge.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30 shadow-[0_0_10px_rgba(51,232,24,0.3)]';
+                badge.innerHTML = `<i class="fas fa-check-circle"></i> Localhost:${currentPort} Online`;
+            } catch (err) {
+                badge.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/30';
+                badge.innerHTML = `<i class="fas fa-times-circle"></i> Localhost:${currentPort} Offline`;
+            }
+        }
+
+        window.onload = () => {
+            updateBasePort("8080");
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALMAI - CEO Executive Suite</title>
+  <meta name="description"
+    content="Dashboard Eksekutif CEO ALMAI - Kalender-First Executive Dashboard, Persetujuan Strategis, dan Notifikasi Harian.">
+
+  <!-- Google Fonts: Montserrat & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome 6 Free -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- CEO Harmonized Stylesheet -->
+  <link rel="stylesheet" href="css/ceo-style.css">
+</head>
+
+<body>
+
+  <div class="ceo-layout">
+
+    <!-- =========================================================
+         1. SIDEBAR NAVIGATION (ALMAI SIGNATURE STYLE)
+         ========================================================= -->
+    <aside class="ceo-sidebar" id="ceoSidebar">
+      <div class="ceo-sidebar-brand">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="brand-badge">A</div>
+          <div class="brand-text">
+            <h2>ALMAI</h2>
+            <p>Executive Suite</p>
+          </div>
+        </div>
+        <button class="sidebar-close-mobile-btn" id="sidebarCloseMobileBtn" aria-label="Tutup Menu">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="menu-label">Navigasi Utama</div>
+        <a href="#calendar-dashboard" class="nav-link active">
+          <div class="nav-link-content">
+            <i class="fas fa-calendar-days"></i>
+            <span>Executive Calendar</span>
+          </div>
+          <span class="nav-badge info">Utama</span>
+        </a>
+
+        <div class="menu-label">Aksi & Keputusan</div>
+        <a href="#" class="nav-link" onclick="openBatchApprovalModal(); return false;">
+          <div class="nav-link-content">
+            <i class="fas fa-signature"></i>
+            <span>Batch Approval</span>
+          </div>
+          <span class="nav-badge urgent" id="sidebarApprBadge">2</span>
+        </a>
+
+        <a href="#" class="nav-link" onclick="openOfficialInvoiceModal('INV-AWS-2026-08-882'); return false;">
+          <div class="nav-link-content">
+            <i class="fas fa-file-invoice"></i>
+            <span>Faktur & Invoice</span>
+          </div>
+        </a>
+
+        <a href="#" class="nav-link" onclick="openExecutiveReportModal(); return false;">
+          <div class="nav-link-content">
+            <i class="fas fa-chart-pie"></i>
+            <span>Laporan Ringkas</span>
+          </div>
+        </a>
+
+        <div class="menu-label">Pengaturan</div>
+        <a href="#" class="nav-link" onclick="openModal('ceoProfileModal'); return false;">
+          <div class="nav-link-content">
+            <i class="fas fa-sliders"></i>
+            <span>Profil & Delegasi</span>
+          </div>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="ceo-user-card" onclick="openModal('ceoProfileModal')">
+          <div class="ceo-avatar-wrap">
+            <div class="ceo-avatar">HP</div>
+            <span class="status-dot"></span>
+          </div>
+          <div class="ceo-user-info">
+            <h4>Dr. Hendra Pratama</h4>
+            <p>Chief Executive Officer</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- =========================================================
+         2. MAIN CONTENT AREA (CALENDAR-FIRST DASHBOARD)
+         ========================================================= -->
+    <main class="ceo-main">
+
+      <!-- Topbar / App Header -->
+      <header class="ceo-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="greeting-text">
+            <h1>Executive Calendar Dashboard</h1>
+            <p id="liveDateText">Memuat tanggal...</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Command Palette Trigger -->
+          <div class="search-trigger" onclick="toggleCommandPalette()" title="Buka pencarian cepat (Ctrl + K)">
+            <i class="fas fa-magnifying-glass"></i>
+            <span>Cari agenda, invoice, approval...</span>
+            <span class="kbd-badge">Ctrl K</span>
+          </div>
+
+          <!-- Quick Glancability Header Chips -->
+          <div class="header-pills-group">
+            <div class="header-stat-pill pill-appr" id="headerPillPending" onclick="openBatchApprovalModal()"
+              title="Persetujuan Menunggu Keputusan">
+              <span class="pulse-dot"></span> 2 Persetujuan
+            </div>
+            <div class="header-stat-pill pill-unread" id="headerPillUnread"
+              onclick="window.openDayDetailSheet('2026-08-22')" title="Notifikasi Belum Dibaca Hari Ini">
+              <i class="far fa-bell text-rose"></i> 3 Belum Dibaca
+            </div>
+          </div>
+
+          <!-- Real-time Live Clock Badge -->
+          <div class="live-clock-badge">
+            <i class="far fa-clock"></i>
+            <span id="liveClockText">--:--:-- WIB</span>
+          </div>
+
+          <!-- Notification Bell Trigger -->
+          <button class="topbar-btn" onclick="window.openDayDetailSheet('2026-08-22')"
+            title="Lihat Notifikasi & Aktivitas Hari Ini" aria-label="Lihat Notifikasi">
+            <i class="far fa-bell"></i>
+            <span class="btn-badge">3</span>
+          </button>
+
+          <!-- Executive Settings & Delegation Trigger -->
+          <button class="topbar-btn" onclick="openModal('ceoProfileModal')" title="Pengaturan & Delegasi Eksekutif"
+            aria-label="Pengaturan Eksekutif">
+            <i class="fas fa-gear"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- =======================================================
+           3. HERO CALENDAR DASHBOARD (MAIN & ONLY DASHBOARD)
+           ======================================================= -->
+      <section id="calendar-dashboard" class="calendar-dashboard-section">
+        <div class="dash-card calendar-hero-card">
+          <div class="ceo-card-header">
+            <div class="card-title-group">
+              <div class="card-icon-pill" style="background: rgba(51,232,24,0.15); color: #33e818;">
+                <i class="fas fa-calendar-days"></i>
+              </div>
+              <div>
+                <h3 id="calCurrentMonthText">Agustus 2026</h3>
+                <p>Kalender Eksekutif ALMAI Group — Klik tanggal untuk melihat rincian aktivitas harian</p>
+              </div>
+            </div>
+
+            <!-- Month Controls -->
+            <div class="cal-controls-right">
+              <div class="cal-nav-group">
+                <button class="cal-icon-btn" id="calPrevBtn" onclick="window.calPrevMonth()" title="Bulan Sebelumnya"
+                  aria-label="Bulan Sebelumnya">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="action-btn-sm" id="calTodayBtn" onclick="window.calGoToToday()" title="Bulan Ini"
+                  aria-label="Bulan Ini"
+                  style="background: rgba(255,255,255,0.06); color: var(--text-primary); border: 1px solid var(--border-subtle);">
+                  Bulan Ini
+                </button>
+                <button class="cal-icon-btn" id="calNextBtn" onclick="window.calNextMonth()" title="Bulan Berikutnya"
+                  aria-label="Bulan Berikutnya">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+
+              <button class="action-btn-sm" onclick="window.openAddEventForDate('2026-08-22')"
+                style="background: #33e818; color: #050505; font-weight: 800; border: none; box-shadow: 0 0 14px rgba(51,232,24,0.35);"
+                title="Tambah Agenda Baru" aria-label="Tambah Agenda">
+                <i class="fas fa-plus"></i>
+                <span>Tambah Agenda</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="ceo-card-body">
+            <!-- Category Filter Bar with Scroll Controls -->
+            <div class="cal-filter-wrapper">
+              <button class="tabs-scroll-btn prev-filter-btn" onclick="window.scrollFiltersLeft()"
+                title="Geser filter ke kiri" aria-label="Geser filter ke kiri">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="cal-filter-bar" id="calFilterBar">
+                <div class="filter-chip active" data-filter="all">Semua Aktivitas</div>
+                <div class="filter-chip" data-filter="meeting">
+                  <span class="chip-dot" style="background: #3b82f6;"></span> Rapat Direksi
+                </div>
+                <div class="filter-chip" data-filter="webinar">
+                  <span class="chip-dot" style="background: #8b5cf6;"></span> Webinar
+                </div>
+                <div class="filter-chip" data-filter="bill">
+                  <span class="chip-dot" style="background: #f59e0b;"></span> Tagihan & Invoice
+                </div>
+                <div class="filter-chip" data-filter="deadline">
+                  <span class="chip-dot" style="background: #f43f5e;"></span> Deadline & MOU
+                </div>
+                <div class="filter-chip" data-filter="general">
+                  <span class="chip-dot" style="background: #33e818;"></span> Event Perusahaan
+                </div>
+              </div>
+              <button class="tabs-scroll-btn next-filter-btn" onclick="window.scrollFiltersRight()"
+                title="Geser filter ke kanan" aria-label="Geser filter ke kanan">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+
+            <!-- Month Calendar Grid Container & Legend -->
+            <div id="calendarGridContainer">
+              <!-- Rendered dynamically via CEOCalendar -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================================================
+       4. DAY DETAILS BOTTOM SHEET / MODAL (MAIN INTERACTION)
+       ========================================================= -->
+  <div class="ceo-modal-overlay bottom-sheet-overlay" id="dayDetailModal">
+    <div class="day-sheet-modal">
+      <div class="sheet-drag-handle"></div>
+
+      <!-- Pinned Header -->
+      <div class="day-sheet-header">
+        <div class="header-left-group">
+          <div class="date-icon-box">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div>
+            <h3 id="dayDetailDateTitle" class="day-sheet-title">Memuat Tanggal...</h3>
+            <div id="dayDetailHeaderStats" class="day-header-stats-row"></div>
+          </div>
+        </div>
+
+        <button class="modal-close-btn" onclick="closeDayDetailSheet()" aria-label="Tutup Rincian">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Pinned Tabs Bar -->
+      <div class="day-sheet-tabs-container" id="dayDetailTabsContainer"></div>
+
+      <!-- Scrollable Activity Items Body -->
+      <div class="day-sheet-body" id="dayDetailModalBody">
+        <!-- Rendered dynamically via renderDayDetailContent() -->
+      </div>
+
+      <!-- Pinned Footer Action Bar -->
+      <div class="day-sheet-footer" id="dayDetailModalFooter"></div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       5. FLOATING EXECUTIVE QUICK ACTION BAR
+       ========================================================= -->
+  <div class="quick-action-bar" id="quickActionBar" role="toolbar" aria-label="Aksi Cepat Eksekutif">
+    <button class="qa-btn qa-btn-main" onclick="openModal('addEventModal')" title="Tambah Jadwal atau Rapat Baru">
+      <i class="fas fa-plus"></i>
+      <span class="qa-label-desktop">Tambah Agenda</span>
+      <span class="qa-label-mobile">Agenda</span>
+    </button>
+
+    <button class="qa-btn qa-btn-sub" onclick="openBatchApprovalModal()" title="Otorisasi Cepat Multi-Persetujuan">
+      <i class="fas fa-signature"></i>
+      <span class="qa-label-desktop">Batch Approval</span>
+      <span class="qa-label-mobile">Approval</span>
+    </button>
+
+    <button class="qa-btn qa-btn-sub" onclick="openOfficialInvoiceModal('INV-AWS-2026-08-882')"
+      title="Buka Dokumen Faktur & Invoice">
+      <i class="fas fa-file-invoice"></i>
+      <span class="qa-label-desktop">Faktur Resmi</span>
+      <span class="qa-label-mobile">Faktur</span>
+    </button>
+
+    <button class="qa-btn qa-btn-sub" onclick="openExecutiveReportModal()" title="Ringkasan Eksekutif & Unduh Laporan">
+      <i class="fas fa-chart-pie"></i>
+      <span class="qa-label-desktop">Laporan</span>
+      <span class="qa-label-mobile">Laporan</span>
+    </button>
+  </div>
+
+  <!-- =========================================================
+       6. SUPPORTING MODALS & OVERLAYS
+       ========================================================= -->
+
+  <!-- A. Official Executive Invoice Modal -->
+  <div class="ceo-modal-overlay" id="officialInvoiceModal">
+    <div class="ceo-modal" style="max-width: 780px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-invoice" style="color: #33e818; margin-right: 8px;"></i> Dokumen Faktur & Invoice
+          Resmi ALMAI</h3>
+        <button class="modal-close-btn" onclick="closeModal('officialInvoiceModal')"><i
+            class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="officialInvoiceModalBody">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="modal-footer" id="officialInvoiceModalFooter">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- B. Interactive Batch Approval Modal -->
+  <div class="ceo-modal-overlay" id="batchApprovalModal">
+    <div class="ceo-modal" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-check-double" style="color: #33e818; margin-right: 8px;"></i> Batch Approval Otorisasi
+          C-Level</h3>
+        <button class="modal-close-btn" onclick="closeModal('batchApprovalModal')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="batchApprovalModalBody">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <span id="batchApprSelectedCount" style="font-size: 12px; font-weight: 800; color: var(--text-secondary);">2
+          Keputusan Terpilih</span>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-detail" onclick="closeModal('batchApprovalModal')">Batal</button>
+          <button class="btn-approve" id="batchApprConfirmBtn" onclick="executeSelectedBatchApprovals()">
+            <i class="fas fa-check-double"></i>
+            <span>Setujui Semua Terpilih</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. Executive Report Generator Modal -->
+  <div class="ceo-modal-overlay" id="executiveReportModal">
+    <div class="ceo-modal" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-pdf" style="color: #33e818; margin-right: 8px;"></i> Executive Summary Report &
+          Company Pulse</h3>
+        <button class="modal-close-btn" onclick="closeModal('executiveReportModal')"><i
+            class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="executiveReportModalBody">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="action-btn-sm" onclick="exportExecutiveReportExcel()"
+          style="background: rgba(255,255,255,0.06); color: #fff; border: 1px solid var(--border-subtle); padding: 8px 14px;">
+          <i class="fas fa-file-excel" style="color: #10b981; margin-right: 6px;"></i>
+          <span>Ekspor CSV / Excel</span>
+        </button>
+
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-detail" onclick="closeModal('executiveReportModal')">Tutup</button>
+          <button class="btn-approve" onclick="printExecutiveReportDirect()">
+            <i class="fas fa-print"></i>
+            <span>Cetak / Unduh PDF (1 Halaman)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D. Add Event Modal -->
+  <div class="ceo-modal-overlay" id="addEventModal">
+    <div class="ceo-modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-plus" style="color: #33e818; margin-right: 8px;"></i> Tambah Agenda / Kegiatan CEO
+        </h3>
+        <button class="modal-close-btn" onclick="closeModal('addEventModal')" aria-label="Close"><i
+            class="fas fa-xmark"></i></button>
+      </div>
+      <form onsubmit="handleCreateEventSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Judul Agenda</label>
+            <input type="text" id="newEventTitle" class="form-input" placeholder="Contoh: Rapat Pleno Direksi Q3"
+              required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Tanggal</label>
+              <input type="date" id="newEventDate" class="form-input" value="2026-08-22" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Waktu (WIB)</label>
+              <input type="time" id="newEventTime" class="form-input" value="14:00" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Kategori</label>
+            <select id="newEventCategory" class="form-select">
+              <option value="meeting">Rapat Direksi / Meeting</option>
+              <option value="webinar">Webinar / Sesi Edukasi</option>
+              <option value="bill">Jatuh Tempo Tagihan</option>
+              <option value="deadline">Deadline & Penandatanganan MOU</option>
+              <option value="general">Event Perusahaan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Lokasi / Link Meeting</label>
+            <input type="text" id="newEventLocation" class="form-input"
+              placeholder="Contoh: Boardroom Lt. 8 / Google Meet">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Deskripsi / Poin Bahasan</label>
+            <textarea id="newEventDesc" class="form-textarea" rows="3"
+              placeholder="Tuliskan catatan penting agenda ini..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-detail" onclick="closeModal('addEventModal')">Batal</button>
+          <button type="submit" class="btn-approve">
+            <i class="fas fa-check"></i>
+            <span>Simpan ke Kalender</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- E. Event Detail Modal -->
+  <div class="ceo-modal-overlay" id="eventDetailModal">
+    <div class="ceo-modal">
+      <div class="modal-header">
+        <h3 id="evtModalTitle">Detail Agenda</h3>
+        <button class="modal-close-btn" onclick="closeModal('eventDetailModal')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="evtModalBody">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-detail" onclick="closeModal('eventDetailModal')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- F. CEO Profile & Delegation Settings Modal -->
+  <div class="ceo-modal-overlay" id="ceoProfileModal">
+    <div class="ceo-modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-shield" style="color: #33e818; margin-right: 8px;"></i> Profil & Delegasi Otorisasi
+          CEO</h3>
+        <button class="modal-close-btn" onclick="closeModal('ceoProfileModal')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+          <div class="ceo-avatar" style="width: 56px; height: 56px; font-size: 20px;">HP</div>
+          <div>
+            <h4 style="font-size: 16px; font-weight: 800; color: var(--text-primary);">Dr. Hendra Pratama</h4>
+            <p style="font-size: 12px; color: var(--text-muted);">Chief Executive Officer • ALMAI Group</p>
+            <span
+              style="font-size: 11px; font-weight: 800; color: #050505; background: #33e818; padding: 2px 8px; border-radius: 99px; display: inline-block; margin-top: 4px;">
+              Executive Level 1 Access (Full)
+            </span>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <h4 style="font-size: 13px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px;">Pengaturan
+            Delegasi Otorisasi Otomatis</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label
+              style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-primary); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); font-size: 12.5px; cursor: pointer;">
+              <span>Otomatisasi Approval Pengeluaran &lt; Rp 5.000.000 ke CFO</span>
+              <input type="checkbox" checked style="accent-color: #33e818; width: 16px; height: 16px;">
+            </label>
+            <label
+              style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-primary); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); font-size: 12.5px; cursor: pointer;">
+              <span>Notifikasi Prioritas Tinggi via WhatsApp Pribadi</span>
+              <input type="checkbox" checked style="accent-color: #33e818; width: 16px; height: 16px;">
+            </label>
+            <label
+              style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-primary); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); font-size: 12.5px; cursor: pointer;">
+              <span>Mode Fokus Rapat (Nonaktifkan Peringatan Non-Kritis)</span>
+              <input type="checkbox" style="accent-color: #33e818; width: 16px; height: 16px;">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-approve"
+          onclick="showToast('success', 'Preferensi CEO berhasil diperbarui'); closeModal('ceoProfileModal');">
+          <i class="fas fa-check"></i>
+          <span>Simpan Preferensi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- G. Command Palette (Ctrl + K) Overlay -->
+  <div class="command-palette-overlay" id="commandPaletteOverlay">
+    <div class="command-box">
+      <div class="command-input-wrap">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" id="commandPaletteInput" class="command-input"
+          placeholder="Ketik perintah atau cari (contoh: AWS, Mandiri, Proposal, Direksi)...">
+        <span class="kbd-badge">ESC</span>
+      </div>
+      <div class="command-results" id="commandPaletteResults">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container Element -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/ceo-data.js"></script>
+  <script src="js/ceo-calendar.js"></script>
+  <script src="js/ceo-app.js"></script>
+</body>
+
+</html>

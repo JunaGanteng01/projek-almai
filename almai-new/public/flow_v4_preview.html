@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALMAI Registration Flow v4.0 - Interactive Preview (almai.id)</title>
+    
+    <!-- TailwindCSS & FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              accent: '#33e818',
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html, body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        input {
+            width: 100%;
+            background-color: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            font-size: 0.875rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #33e818 !important;
+            box-shadow: 0 0 10px rgba(51, 232, 24, 0.2);
+        }
+
+        .wa-box {
+            background-color: #0b141a;
+            border: 1px solid #1f2c34;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            color: #e9edef;
+            line-height: 1.6;
+        }
+
+        .system-log {
+            background-color: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 0.825rem;
+            color: #33e818;
+            font-family: monospace;
+            height: 160px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen relative overflow-x-hidden pb-12">
+
+    <!-- Background Elements -->
+    <div class="absolute inset-0 bg-grid z-0 pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] md:w-[900px] h-[400px] md:h-[500px] bg-accent/20 blur-[130px] rounded-full pointer-events-none"></div>
+
+    <!-- Header / Navbar Preview -->
+    <nav class="relative z-10 w-full border-b border-white/10 bg-black/50 backdrop-blur-md px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-accent flex items-center justify-center text-black font-extrabold text-lg shadow-[0_0_15px_rgba(51,232,24,0.4)]">
+                    A
+                </div>
+                <span class="font-extrabold text-xl tracking-tight">ALMAI<span class="text-accent">.ID</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-300">
+                <a href="#" class="hover:text-accent transition">Layanan</a>
+                <a href="#" class="hover:text-accent transition">WPA Mentor</a>
+                <a href="#" class="hover:text-accent transition">Edukasi</a>
+                <a href="#" class="hover:text-accent transition">Advokasi</a>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1 bg-accent/10 border border-accent/30 text-accent rounded-full text-xs font-bold uppercase tracking-wider">
+                    Flow v4.0 (Tombol Inline)
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="relative z-10 w-full max-w-6xl px-4 md:px-6 mx-auto pt-10">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
+                Pendaftaran Member <span class="text-accent">ALMAI v4.0</span>
+            </h1>
+            <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+                Cukup isi Nama Lengkap & Email. Tombol 'Pilih WPA' terletak sejajar di sebelah teks bantuan referral.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Side: Form Pendaftaran (Standard almai.id UI - Inline Button) -->
+            <div class="lg:col-span-5">
+                <div class="bg-[#111] rounded-2xl border border-white/10 p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                    
+                    <!-- Tabs Header -->
+                    <div class="flex mb-6 bg-[#0a0a0a] rounded-full p-1 border border-white/10">
+                        <button class="flex-1 py-2.5 rounded-full text-sm font-bold text-gray-500 hover:text-white transition">Login</button>
+                        <button class="flex-1 py-2.5 rounded-full text-sm font-bold bg-accent text-black shadow-[0_0_15px_rgba(51,232,24,0.3)] transition">Daftar</button>
+                    </div>
+
+                    <!-- Flash Message Validation Error (Hidden by default) -->
+                    <div id="toast-error" class="hidden bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-4 text-sm">
+                        <div class="font-bold flex items-center gap-2 mb-1">
+                            <i class="fas fa-exclamation-triangle"></i> Email Sudah Terdaftar
+                        </div>
+                        <p class="text-xs text-red-300">
+                            Email yang Anda gunakan sudah terdaftar. Silakan login menggunakan akun yang sudah ada.
+                        </p>
+                        <div class="mt-2 text-xs">
+                            <a href="#" class="text-accent font-bold underline">Login Akun</a> atau <a href="#" class="text-accent font-bold underline">Lupa Password</a>
+                        </div>
+                    </div>
+
+                    <!-- Form Registration v4.0 (Inline Pilih WPA) -->
+                    <form id="regForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1.5">
+                                Nama Lengkap <span class="text-red-400">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"><i class="fas fa-user"></i></span>
+                                <input type="text" id="name" placeholder="Nama lengkap Anda" required value="Budi Santoso" class="pl-11">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1.5">
+                                Email <span class="text-red-400">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"><i class="fas fa-envelope"></i></span>
+                                <input type="email" id="email" placeholder="nama@email.com" required value="budi@example.com" class="pl-11">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1.5">
+                                Kode Referral / Pendamping <span class="text-gray-500 font-normal">(Opsional)</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"><i class="fas fa-ticket-alt"></i></span>
+                                <input type="text" id="ref" placeholder="Masukkan Kode Referral" class="pl-11 uppercase">
+                            </div>
+                        </div>
+
+                        <!-- Section: Belum memiliki Kode Referral? + Tombol Inline -->
+                        <div class="bg-[#0a0a0a] border border-white/10 rounded-xl p-3.5 mt-2 flex items-center justify-between gap-3">
+                            <span class="text-xs text-gray-300 font-semibold">Belum memiliki Kode Referral?</span>
+                            <button type="button" onclick="openWpaModal()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 transition shadow-md whitespace-nowrap">
+                                <i class="fas fa-user-tie"></i> Pilih WPA
+                            </button>
+                        </div>
+                        <div id="selectedWpaInfo" class="hidden mt-2 text-xs text-accent font-semibold flex items-center gap-1">
+                            <i class="fas fa-check-circle"></i> Terpilih: <span id="wpaNameText" class="text-white"></span>
+                        </div>
+
+                        <!-- Tombol Daftar (Langsung Kirim WA) -->
+                        <button type="submit" class="w-full py-4 bg-accent text-black font-extrabold rounded-xl hover:bg-white transition shadow-[0_0_25px_rgba(51,232,24,0.35)] mt-4 flex items-center justify-center gap-2 text-base">
+                            <i class="fab fa-whatsapp text-lg"></i> DAFTAR VIA WHATSAPP
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Right Side: Flow Automation & System Output Preview -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- 1. Outgoing WA Message -->
+                <div class="bg-[#111] rounded-2xl border border-white/10 p-6">
+                    <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                            <i class="fab fa-whatsapp text-base"></i> Format Pesan WhatsApp Pembuka (Poin 3.b)
+                        </div>
+                        <span class="text-[11px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-2.5 py-0.5 rounded-full font-bold">wa.me Direct Link</span>
+                    </div>
+                    <div class="wa-box font-mono" id="outgoingWa">
+*(Tekan 'DAFTAR VIA WHATSAPP' untuk mensimulasikan pesan otomatis)*
+                    </div>
+                </div>
+
+                <!-- 2. System WA Notification -->
+                <div class="bg-[#111] rounded-2xl border border-white/10 p-6">
+                    <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                            <i class="fas fa-bell text-base"></i> Notifikasi WhatsApp Balasan dari ALMAI (Poin 4)
+                        </div>
+                        <span class="text-[11px] bg-amber-500/10 border border-amber-500/30 text-amber-400 px-2.5 py-0.5 rounded-full font-bold">ALMAI Gateway</span>
+                    </div>
+                    <div class="wa-box font-sans text-xs md:text-sm" id="systemWa">
+*(Pesan WhatsApp balasan berisi detail akun, pendamping, +10 ALMAI Poin, & link Dashboard)*
+                    </div>
+                </div>
+
+                <!-- 3. System Log & Admin Integration -->
+                <div class="bg-[#111] rounded-2xl border border-white/10 p-6">
+                    <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2 text-accent font-bold text-sm">
+                            <i class="fas fa-database text-base"></i> Integrasi Admin Dashboard & Log Sistem
+                        </div>
+                        <span class="text-[11px] bg-accent/10 border border-accent/30 text-accent px-2.5 py-0.5 rounded-full font-bold">Status: ACTIVE</span>
+                    </div>
+                    <div class="system-log" id="sysLog">
+> System engine ready. Form v4.0 active (Tombol 'Pilih WPA' inline)...
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal Selector WPA (ALMAI Theme) -->
+    <div class="modal-overlay" id="wpaModal">
+        <div class="bg-[#111] border border-white/20 w-11/12 max-w-lg rounded-2xl p-6 text-white shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-3">
+                <h3 class="font-bold text-base md:text-lg text-accent flex items-center gap-2">
+                    <i class="fas fa-user-shield"></i> Pilih WPA Pendamping Resmi
+                </h3>
+                <button onclick="closeWpaModal()" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+            
+            <p class="text-xs text-gray-400 mb-4">
+                Silakan pilih salah satu Wealth Protection Advisor (WPA) resmi ALMAI sebagai pembimbing trading dan edukasi finansial Anda:
+            </p>
+
+            <div class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                
+                <!-- WPA Item 1 -->
+                <div onclick="selectWpa('WPA-GOLD-01', 'Ahmad Hidayat (Gold Specialist)')" class="bg-[#0a0a0a] border border-white/10 hover:border-accent p-3.5 rounded-xl flex items-center gap-3 cursor-pointer transition group">
+                    <div class="w-11 h-11 rounded-full bg-accent/20 border border-accent/40 text-accent font-extrabold flex items-center justify-center text-sm group-hover:bg-accent group-hover:text-black transition">
+                        AH
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-sm text-white group-hover:text-accent transition">Ahmad Hidayat</h4>
+                            <span class="text-[10px] bg-accent/20 text-accent px-2 py-0.5 rounded-full font-bold">Official WPA</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">Gold Specialist • Rating ⭐ 4.90 (120+ Member)</p>
+                    </div>
+                </div>
+
+                <!-- WPA Item 2 -->
+                <div onclick="selectWpa('WPA-FX-02', 'Siti Rahmawati (Forex Specialist)')" class="bg-[#0a0a0a] border border-white/10 hover:border-accent p-3.5 rounded-xl flex items-center gap-3 cursor-pointer transition group">
+                    <div class="w-11 h-11 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 font-extrabold flex items-center justify-center text-sm group-hover:bg-purple-500 group-hover:text-black transition">
+                        SR
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-sm text-white group-hover:text-accent transition">Siti Rahmawati</h4>
+                            <span class="text-[10px] bg-accent/20 text-accent px-2 py-0.5 rounded-full font-bold">Official WPA</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">Forex Specialist • Rating ⭐ 4.95 (98 Member)</p>
+                    </div>
+                </div>
+
+                <!-- WPA Item 3 -->
+                <div onclick="selectWpa('CWPA-PRO-03', 'Rudi Wijaya (CWPA Senior)')" class="bg-[#0a0a0a] border border-white/10 hover:border-accent p-3.5 rounded-xl flex items-center gap-3 cursor-pointer transition group">
+                    <div class="w-11 h-11 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 font-extrabold flex items-center justify-center text-sm group-hover:bg-blue-500 group-hover:text-black transition">
+                        RW
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-sm text-white group-hover:text-accent transition">Rudi Wijaya</h4>
+                            <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full font-bold">CWPA Certified</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">Certified WPA • Rating ⭐ 4.88 (210 Member)</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openWpaModal() {
+            document.getElementById('wpaModal').style.display = 'flex';
+        }
+
+        function closeWpaModal() {
+            document.getElementById('wpaModal').style.display = 'none';
+        }
+
+        function selectWpa(code, name) {
+            document.getElementById('ref').value = code;
+            document.getElementById('selectedWpaInfo').classList.remove('hidden');
+            document.getElementById('wpaNameText').innerText = name;
+            closeWpaModal();
+            logMessage('WPA Pendamping Dipilih: ' + name + ' (' + code + ')');
+        }
+
+        function logMessage(msg) {
+            const sysLog = document.getElementById('sysLog');
+            const time = new Date().toLocaleTimeString();
+            sysLog.innerHTML += `\n[${time}] ${msg}`;
+            sysLog.scrollTop = sysLog.scrollHeight;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const ref = document.getElementById('ref').value || 'WPA Pendamping ALMAI';
+
+            // Simulate validation error test
+            if (email === 'registered@example.com') {
+                document.getElementById('toast-error').classList.remove('hidden');
+                logMessage('❌ Validasi Gagal: Email sudah terdaftar di sistem.');
+                return;
+            } else {
+                document.getElementById('toast-error').classList.add('hidden');
+            }
+
+            logMessage('✅ Validasi Data: Email valid & belum terdaftar.');
+            logMessage('📱 Membuka link WhatsApp otomatis (wa.me)...');
+
+            // Format Outgoing WA Message (Sesuai Spesifikasi v4.0 Poin 3.b)
+            const outgoing = `Halo Tim ALMAI,\n\nBerikut data saya:\n\nNama Lengkap:\n${name}\n\nEmail:\n${email}\n\nMohon diproses.\n\nTerima kasih.`;
+            document.getElementById('outgoingWa').innerText = outgoing;
+
+            // Format System Response WA Message (Sesuai Spesifikasi v4.0 Poin 4)
+            const systemWa = `🎉 Selamat! Pendaftaran ALMAI Anda Berhasil.\n\nBerikut data akun Anda:\n\n👤 Nama Lengkap\n${name}\n\n📧 Email\n${email}\n\n──────────────────\n\n🤝 Pendamping Anda\n${ref}\n\n🎁 Bonus Registrasi\n+10 ALMAI Poin telah berhasil ditambahkan ke akun Anda.\n\n──────────────────\n\nSilakan lanjutkan pengalaman trading dan edukasi Anda dengan masuk ke Dashboard Member melalui tautan berikut:\n\n🔗 https://almai.id/user/dashboard\n\nSelamat bergabung bersama keluarga besar ALMAI. Semoga perjalanan belajar dan trading Anda semakin terarah dan berkembang.\n\n© ALMAI`;
+            document.getElementById('systemWa').innerText = systemWa;
+
+            logMessage('🎉 Akun Member berhasil dibuat dengan Status: ACTIVE');
+            logMessage('🎁 Kredit Bonus: +10 ALMAI Poin ditambahkan ke akun');
+            logMessage('📊 Data member otomatis tersimpan di Dashboard Admin ALMAI under mentor: ' + ref);
+            logMessage('➡️ User otomatis login dan diarahkan ke Dashboard Member (/user/dashboard)');
+        }
+    </script>
+</body>
+</html>

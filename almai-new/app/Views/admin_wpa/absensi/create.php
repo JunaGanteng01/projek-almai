@@ -1,0 +1,102 @@
+<?= $this->extend('admin_wpa/layouts/main') ?>
+
+<?= $this->section('content') ?>
+
+<style>
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+</style>
+
+<div class="space-y-6">
+    <div class="flex items-center gap-4">
+        <a href="<?= base_url('admin-admin-wpa/absensi') ?>" class="p-2 hover:bg-white/10 rounded-lg">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+            <h1 class="text-2xl font-bold">Buat Absensi</h1>
+            <p class="text-gray-400 text-sm">Buat sesi absensi baru dan generate QR Code</p>
+        </div>
+    </div>
+
+    <div class="bg-[#111] border border-white/10 rounded-xl p-6">
+        <form action="<?= base_url('admin-admin-wpa/absensi/store') ?>" method="POST" class="space-y-6">
+            <?= csrf_field() ?>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Kegiatan (Tipe) <span class="text-red-400">*</span></label>
+                    <select name="kegiatan" required class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3">
+                        <option value="">-- Pilih Kegiatan --</option>
+                        <option value="seminar_fgd">Seminar / FGD</option>
+                        <option value="pelatihan_simulasi">Pelatihan Simulasi</option>
+                        <option value="signals">Signal</option>
+                        <option value="konsultasi">Konsultasi</option>
+                        <option value="expert_advisor">Expert Advisor</option>
+                        <option value="kegiatan_lainnya">Kegiatan Lainnya</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Judul/Nama Layanan <span class="text-red-400">*</span></label>
+                    <input type="text" name="judul" required class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3" placeholder="Masukkan judul acara">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Jumlah Klien (Estimasi)</label>
+                    <input type="number" name="jumlah_klien" value="0" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Produk</label>
+                    <input type="text" name="produk" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3" placeholder="Nama produk (opsional)">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <!-- wpa_id is automatically assigned via controller from session -->
+                    <label class="block text-sm text-gray-400 mb-2">Nama CWPA</label>
+                    <select name="cwpa_id" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3">
+                        <option value="">-- Pilih CWPA (Opsional) --</option>
+                        <?php foreach ($cwpa_list as $cwpa): ?>
+                            <option value="<?= $cwpa['id'] ?>"><?= esc($cwpa['user_name']) ?> - <?= esc($cwpa['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Lokasi / Media</label>
+                    <input type="text" name="lokasi" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3" placeholder="Zoom, Google Meet, Hotel, dll">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Topik / Keterangan</label>
+                    <input type="text" name="topik" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3" placeholder="Topik pembahasan">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Tanggal Kegiatan <span class="text-red-400">*</span></label>
+                    <input type="date" name="tanggal_kegiatan" required class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Waktu Expired Link Absensi</label>
+                    <input type="datetime-local" name="expired_link_kode_qr" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3">
+                    <p class="text-[10px] text-gray-500 mt-1">Biarkan kosong jika link berlaku selamanya</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-white/10">
+                <button type="submit" class="px-8 py-3 bg-accent text-black font-bold rounded-xl hover:bg-white transition flex items-center gap-2">
+                    <i class="fas fa-save"></i> Simpan & Generate QR
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?= $this->endSection() ?>

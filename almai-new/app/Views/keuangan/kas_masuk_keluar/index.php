@@ -1,0 +1,261 @@
+<?= $this->extend('keuangan/layouts/main') ?>
+
+<?= $this->section('content') ?>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-white uppercase tracking-tighter">Kas Masuk & Kas Keluar</h1>
+        <p class="text-accent text-xs mt-1 font-bold">Pencatatan Pemasukan dan Pengeluaran Kas Terintegrasi COA</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+        <a href="<?= base_url('keuangan/kas-masuk-keluar/export-excel') ?>" class="px-4 py-2.5 bg-blue-500/20 text-blue-400 border border-blue-500/50 font-bold rounded-xl hover:bg-blue-500/30 transition flex items-center">
+            <i class="fas fa-file-excel mr-2"></i> Export
+        </a>
+        <button onclick="openImportModal()" class="px-4 py-2.5 bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 font-bold rounded-xl hover:bg-yellow-500/30 transition flex items-center">
+            <i class="fas fa-file-import mr-2"></i> Import
+        </button>
+        <button onclick="openModal('masuk')" class="px-5 py-2.5 bg-green-500/20 text-green-400 border border-green-500/50 font-bold rounded-xl hover:bg-green-500/30 transition">
+            <i class="fas fa-arrow-down mr-2"></i> Kas Masuk
+        </button>
+        <button onclick="openModal('keluar')" class="px-5 py-2.5 bg-red-500/20 text-red-400 border border-red-500/50 font-bold rounded-xl hover:bg-red-500/30 transition">
+            <i class="fas fa-arrow-up mr-2"></i> Kas Keluar
+        </button>
+    </div>
+</div>
+
+<?php if(session()->getFlashdata('success')): ?>
+    <div class="bg-green-500/10 border border-green-500/30 text-green-400 p-4 rounded-xl mb-6">
+        <i class="fas fa-check-circle mr-2"></i> <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if(session()->getFlashdata('error')): ?>
+    <div class="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl mb-6">
+        <i class="fas fa-exclamation-circle mr-2"></i> <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
+
+<div class="bg-[#111] border border-white/10 rounded-2xl p-6 shadow-xl overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-white/5 border-b border-white/10">
+                <tr>
+                    <th class="px-4 py-3 text-left font-bold text-gray-400 uppercase tracking-wider">No</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-400 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-400 uppercase tracking-wider">Akun Kas/Bank</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-400 uppercase tracking-wider">Akun Tujuan</th>
+                    <th class="px-4 py-3 text-right font-bold text-gray-400 uppercase tracking-wider">Nominal</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-400 uppercase tracking-wider">Keterangan</th>
+                    <th class="px-4 py-3 text-center font-bold text-gray-400 uppercase tracking-wider">Tipe</th>
+                    <th class="px-4 py-3 text-center font-bold text-gray-400 uppercase tracking-wider">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+                <?php if (empty($transactions)): ?>
+                    <tr>
+                        <td colspan="8" class="px-4 py-8 text-center text-gray-500">Belum ada transaksi Kas Masuk atau Keluar.</td>
+                    </tr>
+                <?php else: ?>
+                    <?php $no = 1; foreach ($transactions as $tx): ?>
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="px-4 py-3 text-gray-400"><?= $no++ ?></td>
+                            <td class="px-4 py-3 text-gray-300"><?= date('d M Y', strtotime($tx['tanggal'])) ?></td>
+                            <td class="px-4 py-3"><span class="font-bold text-white"><?= esc($tx['akun_kas']) ?></span></td>
+                            <td class="px-4 py-3 text-white"><?= esc($tx['akun_tujuan']) ?></td>
+                            <td class="px-4 py-3 text-right font-mono font-bold text-white">Rp <?= number_format($tx['nominal'], 0, ',', '.') ?></td>
+                            <td class="px-4 py-3 text-gray-400 text-xs"><?= esc($tx['keterangan']) ?></td>
+                            <td class="px-4 py-3 text-center">
+                                <?php if ($tx['tipe'] === 'Kas Masuk'): ?>
+                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30">Kas Masuk</span>
+                                <?php else: ?>
+                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30">Kas Keluar</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <a href="<?= base_url('keuangan/kas-masuk-keluar/delete/' . $tx['no_reff']) ?>" class="text-red-400 hover:text-red-300 transition" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini? (Jurnal juga akan dihapus)')" title="Hapus Transaksi">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Form -->
+<div id="kasModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#111] border border-white/10 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-white/10 flex items-center justify-between sticky top-0 bg-[#111]">
+            <h2 id="modalTitle" class="text-xl font-bold text-white uppercase">Tambah Transaksi Kas</h2>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <form method="post" action="<?= base_url('keuangan/kas-masuk-keluar/save') ?>" class="p-6 space-y-5">
+            <?= csrf_field() ?>
+            <input type="hidden" name="tipe" id="formTipe">
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Tanggal Transaksi</label>
+                <input type="date" name="tanggal" required value="<?= date('Y-m-d') ?>" class="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Akun Kas / Bank</label>
+                <select name="akun_kas_id" required class="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-accent focus:outline-none transition">
+                    <option value="">-- Pilih Akun Kas/Bank --</option>
+                    <?php foreach ($kasBankAccounts as $akun): ?>
+                        <option value="<?= $akun['id'] ?>"><?= esc($akun['kode_akun']) ?> - <?= esc($akun['nama_akun']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div>
+                <label id="labelAkunLawan" class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Akun Tujuan / Lawan</label>
+                <select name="akun_lawan_id" id="akunLawan" required class="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-accent focus:outline-none transition">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Nominal (Rp)</label>
+                <input type="number" name="nominal" required min="1" step="1" placeholder="Masukkan nominal" class="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white font-mono focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Keterangan / Deskripsi</label>
+                <textarea name="deskripsi" rows="3" required placeholder="Contoh: Pembayaran tagihan listrik bulan Mei..." class="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition"></textarea>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition">Batal</button>
+                <button type="submit" class="px-5 py-2.5 bg-accent text-black font-bold rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(51,232,24,0.3)]">Simpan Transaksi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div id="importModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#111] border border-white/10 rounded-2xl max-w-md w-full">
+        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white uppercase"><i class="fas fa-file-excel text-yellow-400 mr-2"></i> Import Excel</h2>
+            <button onclick="closeImportModal()" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="mb-6 bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 text-sm text-blue-300">
+                <p class="font-bold mb-2">Panduan Import:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>Gunakan format template yang telah disediakan.</li>
+                    <li>Pastikan Kode Akun Kas dan Kode Akun Tujuan terisi dengan benar.</li>
+                    <li>Jangan merubah header (baris pertama) pada template.</li>
+                </ul>
+            </div>
+            
+            <a href="<?= base_url('keuangan/kas-masuk-keluar/download-template') ?>" class="w-full block text-center mb-6 px-4 py-3 bg-white/10 text-white border border-white/20 font-bold rounded-xl hover:bg-white/20 transition">
+                <i class="fas fa-download mr-2"></i> Download Template
+            </a>
+
+            <form method="post" action="<?= base_url('keuangan/kas-masuk-keluar/import-excel') ?>" enctype="multipart/form-data" class="space-y-4">
+                <?= csrf_field() ?>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Upload File (.xlsx)</label>
+                    <input type="file" name="file_excel" accept=".xlsx" required class="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-accent focus:outline-none transition">
+                </div>
+                
+                <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                    <button type="button" onclick="closeImportModal()" class="px-5 py-2.5 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 bg-accent text-black font-bold rounded-xl hover:bg-white transition shadow-[0_0_15px_rgba(51,232,24,0.3)]">Proses Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pendapatanAccounts = <?= json_encode($pendapatanAccounts) ?>;
+    const pengeluaranAccounts = <?= json_encode($pengeluaranAccounts) ?>;
+    const pindahDanaAccounts = <?= json_encode($pindahDanaAccounts) ?>;
+
+    function openModal(tipe) {
+        document.getElementById('kasModal').classList.remove('hidden');
+        document.getElementById('formTipe').value = tipe;
+        
+        const titleEl = document.getElementById('modalTitle');
+        const labelLawan = document.getElementById('labelAkunLawan');
+        const selectLawan = document.getElementById('akunLawan');
+        
+        // Reset options
+        selectLawan.innerHTML = '<option value="">-- Pilih Akun COA --</option>';
+
+        if (tipe === 'masuk') {
+            titleEl.innerHTML = '<i class="fas fa-arrow-down text-green-400 mr-2"></i> Tambah Kas Masuk';
+            labelLawan.innerText = 'PINDAH DANA (ASAL DANA)';
+            selectLawan.innerHTML = '<option value="">-- Pilih Pindah Dana --</option>';
+            
+            const optGroupPindah = document.createElement('optgroup');
+            optGroupPindah.label = 'Fitur Pindah Dana';
+            
+            pindahDanaAccounts.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.id;
+                opt.textContent = item.nama_akun;
+                optGroupPindah.appendChild(opt);
+            });
+            selectLawan.appendChild(optGroupPindah);
+
+            if (pendapatanAccounts && pendapatanAccounts.length > 0) {
+                const optGroupPendapatan = document.createElement('optgroup');
+                optGroupPendapatan.label = 'Akun Pendapatan Lainnya';
+                pendapatanAccounts.forEach(akun => {
+                    const opt = document.createElement('option');
+                    opt.value = akun.id;
+                    opt.textContent = akun.kode_akun + ' - ' + akun.nama_akun;
+                    optGroupPendapatan.appendChild(opt);
+                });
+                selectLawan.appendChild(optGroupPendapatan);
+            }
+        } else {
+            titleEl.innerHTML = '<i class="fas fa-arrow-up text-red-400 mr-2"></i> Tambah Kas Keluar';
+            labelLawan.innerText = 'Akun Beban / Biaya (Tujuan Dana)';
+
+            const optGroupPindah = document.createElement('optgroup');
+            optGroupPindah.label = 'Pindah Dana';
+            pindahDanaAccounts.forEach(akun => {
+                const opt = document.createElement('option');
+                opt.value = akun.id;
+                opt.textContent = akun.nama_akun;
+                optGroupPindah.appendChild(opt);
+            });
+            selectLawan.appendChild(optGroupPindah);
+
+            const optGroupPengeluaran = document.createElement('optgroup');
+            optGroupPengeluaran.label = 'Akun Beban / Biaya';
+            
+            pengeluaranAccounts.forEach(akun => {
+                const opt = document.createElement('option');
+                opt.value = akun.id;
+                opt.textContent = akun.kode_akun + ' - ' + akun.nama_akun;
+                optGroupPengeluaran.appendChild(opt);
+            });
+            selectLawan.appendChild(optGroupPengeluaran);
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('kasModal').classList.add('hidden');
+    }
+
+    function openImportModal() {
+        document.getElementById('importModal').classList.remove('hidden');
+    }
+
+    function closeImportModal() {
+        document.getElementById('importModal').classList.add('hidden');
+    }
+</script>
+
+<?= $this->endSection() ?>

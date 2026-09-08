@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "data": {
+    "XAUUSD": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 76245199,
+      "totalProfit": 26245199,
+      "totalSignals": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastUpdated": "2026-06-17T16:30:30.436Z"
+    },
+    "XAGUSD": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 50291250,
+      "totalProfit": 291250,
+      "totalSignals": 2,
+      "wins": 1,
+      "losses": 1,
+      "lastUpdated": "2026-06-17T16:30:27.691Z"
+    },
+    "USOIL": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 48436000,
+      "totalProfit": -1564000,
+      "totalSignals": 2,
+      "wins": 1,
+      "losses": 1,
+      "lastUpdated": "2026-06-17T16:30:25.351Z"
+    },
+    "XNGUSD": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 49470000,
+      "totalProfit": -530000,
+      "totalSignals": 2,
+      "wins": 1,
+      "losses": 1,
+      "lastUpdated": "2026-06-17T16:30:19.434Z"
+    },
+    "AUDUSD": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 50073000,
+      "totalProfit": 73000,
+      "totalSignals": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastUpdated": "2026-06-17T16:30:22.872Z"
+    },
+    "GBPUSD": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 50107000,
+      "totalProfit": 107000,
+      "totalSignals": 2,
+      "wins": 1,
+      "losses": 1,
+      "lastUpdated": "2026-06-17T16:30:16.966Z"
+    },
+    "EURUSD": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 50407000,
+      "totalProfit": 407000,
+      "totalSignals": 2,
+      "wins": 1,
+      "losses": 1,
+      "lastUpdated": "2026-06-17T16:30:13.798Z"
+    },
+    "JP225": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 69822500,
+      "totalProfit": 19822500,
+      "totalSignals": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastUpdated": "2026-06-17T16:30:04.100Z"
+    },
+    "US30": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 60849490,
+      "totalProfit": 10849490,
+      "totalSignals": 2,
+      "wins": 2,
+      "losses": 0,
+      "lastUpdated": "2026-06-17T16:30:00.264Z"
+    },
+    "SPX500": {
+      "modalAwal": 50000000,
+      "modalSaatIni": 50000000,
+      "totalProfit": 0,
+      "totalSignals": 1,
+      "wins": 1,
+      "losses": 0,
+      "lastUpdated": "2026-06-16T16:30:12.645Z"
+    }
+  },
+  "exportedAt": "2026-06-18T10:00:00.000Z"
+}

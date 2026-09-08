@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mengenal Perusahaan Penasihat Berjangka - PT ALMA Indonesia Raya</title>
+    <!-- Montserrat & Public Sans Fonts from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Public+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Canvas for Interactive Network Animation -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Top Branding Bar -->
+    <header class="branding-bar">
+        <div class="brand-logo-container">
+            <svg class="almai-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- lowercase 'a' shape -->
+                <path
+                    d="M50 25C36.2 25 25 36.2 25 50V75C25 77.8 27.2 80 30 80C32.8 80 35 77.8 35 75V50C35 41.7 41.7 35 50 35C58.3 35 65 41.7 65 50V75C65 77.8 67.2 80 70 80C72.8 80 75 77.8 75 75V50C75 36.2 63.8 25 50 25Z"
+                    fill="#33E818" />
+                <!-- leaf extending on the top right -->
+                <path d="M68 25C76 25 80 18 80 18C80 18 73 22 68 25Z" stroke="#33E818" stroke-width="4"
+                    stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                <path d="M68 25C75 25 80 20 83 15C81 22 75 27 68 25Z" fill="#33E818" />
+                <!-- white circle in center -->
+                <circle cx="50" cy="50" r="10" fill="#FFFFFF" />
+            </svg>
+            <span class="brand-text">ALMAI</span>
+        </div>
+        <div class="brand-badge">
+            <span>PERUSAHAAN PENASIHAT BERJANGKA</span>
+        </div>
+    </header>
+
+    <!-- Navigation Drawer Toggle Button -->
+    <button id="drawer-toggle" class="nav-icon-btn" aria-label="Open Slide Navigation">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- Fullscreen Toggle Button -->
+    <button id="fullscreen-toggle" class="nav-icon-btn" aria-label="Toggle Fullscreen">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Slide Navigation Drawer (Side Index) -->
+    <nav id="slide-drawer" class="slide-drawer">
+        <div class="drawer-header">
+            <h3>Daftar Slide</h3>
+            <button id="drawer-close" class="close-btn">&times;</button>
+        </div>
+        <ul class="drawer-menu">
+            <li data-slide="0" class="active"><span>01</span> Cover</li>
+            <li data-slide="1"><span>02</span> Penasihat Berjangka (TRUSTED)</li>
+            <li data-slide="2"><span>03</span> WPA (SPECIALIST)</li>
+            <li data-slide="3"><span>04</span> Expert Advisor (EFFICIENT)</li>
+            <li data-slide="4"><span>05</span> Ekosistem Industri Keuangan</li>
+            <li data-slide="5"><span>06</span> Ekosistem Derivatif Keuangan</li>
+            <li data-slide="6"><span>07</span> Ekosistem Aset Keuangan Digital</li>
+            <li data-slide="7"><span>08</span> Penutup & Materi Inti</li>
+        </ul>
+    </nav>
+
+    <!-- Slides Wrapper -->
+    <main class="slide-deck">
+
+        <!-- Slide 1: Cover -->
+        <section class="slide active" id="slide-1">
+            <div class="slide-content cover-slide">
+                <div class="cover-hero-wrap">
+                    <div class="hero-graphics">
+                        <div class="pulsing-glow"></div>
+                        <svg class="hero-logo-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M50 25C36.2 25 25 36.2 25 50V75C25 77.8 27.2 80 30 80C32.8 80 35 77.8 35 75V50C35 41.7 41.7 35 50 35C58.3 35 65 41.7 65 50V75C65 77.8 67.2 80 70 80C72.8 80 75 77.8 75 75V50C75 36.2 63.8 25 50 25Z"
+                                fill="#33E818" />
+                            <path d="M68 25C75 25 80 20 83 15C81 22 75 27 68 25Z" fill="#33E818" />
+                            <circle cx="50" cy="50" r="10" fill="#FFFFFF" />
+                        </svg>
+                    </div>
+                    <div class="hero-text">
+                        <h1 class="main-title">MENGENAL PERUSAHAAN<br><span class="accent-text">PENASIHAT
+                                BERJANGKA</span></h1>
+                        <p class="subtitle">Gerbang Edukasi Menuju Ekosistem Derivatif & Aset Keuangan Digital</p>
+
+                        <div class="meta-info">
+                            <span class="company-name">PT ALMA Indonesia Raya</span>
+                            <span class="divider">|</span>
+                            <span class="license">Perusahaan Penasihat Berjangka</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="objectives-container card-panel">
+                    <h3 class="panel-title">Tujuan Presentasi</h3>
+                    <div class="objectives-grid">
+                        <div class="objective-card">
+                            <div class="obj-num">1</div>
+                            <p>Memahami peran strategis Penasihat Berjangka.</p>
+                        </div>
+                        <div class="objective-card">
+                            <div class="obj-num">2</div>
+                            <p>Mengenal ekosistem Derivatif & Aset Keuangan Digital.</p>
+                        </div>
+                        <div class="objective-card">
+                            <div class="obj-num">3</div>
+                            <p>Mengetahui posisi trader dalam industri finansial.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Mengenal Perusahaan -->
+        <section class="slide" id="slide-2">
+            <div class="slide-content"
+                style="display: flex; flex-direction: column; gap: 1.5rem; height: 100%; padding-top: 1rem;">
+
+                <!-- Top Section: Intro & Trusted -->
+                <div style="display: flex; gap: 2rem; align-items: stretch; flex: 1;">
+
+                    <!-- Top Left: Intro -->
+                    <div style="flex: 1.5; display: flex; flex-direction: column; justify-content: center;">
+                        <h2
+                            style="font-size: 2.3rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; color: white;">
+                            PENASIHAT DERIVATIF &<br>ASET KEUANGAN DIGITAL</h2>
+                        <h3
+                            style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--color-primary);">
+                            PT. ALMA INDONESIA RAYA | ALMAI</h3>
+                        <div
+                            style="background: rgba(0,0,0,0.3); border-left: 4px solid var(--color-primary); padding: 1.5rem; border-radius: 4px;">
+                            <p style="font-size: 1.2rem; color: #eee; line-height: 1.6; margin: 0;"><strong>Adalah
+                                    :</strong> Perusahaan penasihat berjangka resmi yang berdedikasi untuk memberikan
+                                edukasi, rekomendasi strategi algoritmik, dan perlindungan bagi nasabah dalam
+                                bertransaksi di ekosistem derivatif maupun aset keuangan digital secara transparan dan
+                                independen.</p>
+                        </div>
+                    </div>
+
+                    <!-- Top Right: Trusted -->
+                    <div style="flex: 1; display: flex; flex-direction: column;">
+                        <h2
+                            style="font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; color: white; text-align: right;">
+                            TRUSTED</h2>
+                        <div
+                            style="border: 2px solid var(--color-primary); border-radius: 8px; padding: 1.2rem; background: rgba(0,0,0,0.4); flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600; color: white;">
+                                Legalitas PT ALMAI</h4>
+                            <ul
+                                style="font-size: 0.85rem; line-height: 1.4; color: #ccc; padding-left: 1.2rem; margin-bottom: 1rem; list-style-type: disc;">
+                                <li class="cert-link" data-cert="bi"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">Bank Indonesia : Persetujuan Pelaku Derivatif
+                                    (PUVA)</li>
+                                <li class="cert-link" data-cert="ojk"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">OJK : Prinsip Pelaku Derivatif Penasihat
+                                    Investasi</li>
+                                <li class="cert-link" data-cert="bappebti"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">Bappebti : Penasihat Berjangka <em>Expert
+                                        Advisor</em> & Reguler</li>
+                                <li class="cert-link" data-cert="komdigi"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">Komdigi : Penyelenggara Sistem Elektronik (PSE)
+                                </li>
+                            </ul>
+
+                            <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600; color: white;">
+                                Rekomendasi Bursa</h4>
+                            <ul
+                                style="font-size: 0.85rem; line-height: 1.4; color: #ccc; padding-left: 1.2rem; list-style-type: disc;">
+                                <li class="cert-link" data-cert="jfx"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">JFX untuk EA Metatrader 4</li>
+                                <li class="cert-link" data-cert="cfx"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">CFX untuk EA Kripto</li>
+                                <li class="cert-link" data-cert="icdx"
+                                    style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;"
+                                    onmouseover="this.style.color='var(--color-primary)'"
+                                    onmouseout="this.style.color='#ccc'">ICDX untuk EA Metatrader 5 - Segera</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section: Peran Strategis (Full width) -->
+                <div
+                    style="flex: 0 0 auto; display: flex; flex-direction: column; background: #0f1011; padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h4
+                        style="font-size: 1.2rem; margin-bottom: 1.5rem; text-transform: uppercase; color: white; font-weight: 700; text-align: center;">
+                        PERAN STRATEGIS ALMAI</h4>
+
+                    <div class="role-grid"
+                        style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                        <!-- Cards with onclick handler -->
+                        <div class="role-card glass-panel interactive-role" data-target="info-peran-1"
+                            style="padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1);">
+                            <div class="role-icon" style="font-size: 2rem; margin-bottom: 0.8rem; color: #3b82f6;">📦
+                            </div>
+                            <h3 style="font-size: 0.9rem; color: white; margin: 0; font-weight: bold;">MEMAHAMI PRODUK
+                            </h3>
+                        </div>
+                        <div class="role-card glass-panel interactive-role" data-target="info-peran-2"
+                            style="padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1);">
+                            <div class="role-icon" style="font-size: 2rem; margin-bottom: 0.8rem; color: #60a5fa;">📊
+                            </div>
+                            <h3 style="font-size: 0.9rem; color: white; margin: 0; font-weight: bold;">ANALISIS PELUANG
+                            </h3>
+                        </div>
+                        <div class="role-card glass-panel interactive-role" data-target="info-peran-3"
+                            style="padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1);">
+                            <div class="role-icon" style="font-size: 2rem; margin-bottom: 0.8rem; color: #eab308;">⚠️
+                            </div>
+                            <h3 style="font-size: 0.9rem; color: white; margin: 0; font-weight: bold;">MANAJEMEN RISIKO
+                            </h3>
+                        </div>
+                        <div class="role-card glass-panel interactive-role" data-target="info-peran-4"
+                            style="padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1);">
+                            <div class="role-icon" style="font-size: 2rem; margin-bottom: 0.8rem; color: #ec4899;">⚙️
+                            </div>
+                            <h3 style="font-size: 0.9rem; color: white; margin: 0; font-weight: bold;">STRATEGI &
+                                TEKNOLOGI</h3>
+                        </div>
+                        <div class="role-card glass-panel interactive-role" data-target="info-peran-5"
+                            style="padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1);">
+                            <div class="role-icon" style="font-size: 2rem; margin-bottom: 0.8rem; color: #3b82f6;">🛡️
+                            </div>
+                            <h3 style="font-size: 0.9rem; color: white; margin: 0; font-weight: bold;">PERLINDUNGAN</h3>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Description Box -->
+                    <div
+                        style="background: rgba(0,0,0,0.5); border: 1px solid var(--color-primary); border-radius: 8px; padding: 1.5rem; text-align: center; min-height: 80px; display: flex; align-items: center; justify-content: center; position: relative;">
+
+                        <div id="info-peran-default" class="peran-info-content active">
+                            <p style="color: #aaa; font-size: 1.1rem; margin: 0; font-style: italic;">Klik salah satu
+                                peran strategis di atas untuk melihat detail penjelasannya.</p>
+                        </div>
+
+                        <div id="info-peran-1" class="peran-info-content" style="display: none;">
+                            <p style="color: white; font-size: 1.1rem; margin: 0;"><strong>MEMAHAMI PRODUK:</strong>
+                                Mengupas secara mendalam instrumen derivatif maupun kripto agar trader benar-benar paham
+                                struktur transaksi dan karakter dasar produk investasi.</p>
+                        </div>
+
+                        <div id="info-peran-2" class="peran-info-content" style="display: none;">
+                            <p style="color: white; font-size: 1.1rem; margin: 0;"><strong>ANALISIS PELUANG:</strong>
+                                Mengidentifikasi momentum pasar yang prospektif berdasar riset mendalam, perpaduan
+                                analisis teknikal, fundamental, serta sentimen pasar terkini.</p>
+                        </div>
+
+                        <div id="info-peran-3" class="peran-info-content" style="display: none;">
+                            <p style="color: white; font-size: 1.1rem; margin: 0;"><strong>MANAJEMEN RISIKO:</strong>
+                                Memetakan rasio untung-rugi yang objektif dan menerapkan parameter pelindung untuk
+                                menjaga keberlangsungan portofolio dalam jangka panjang.</p>
+                        </div>
+
+                        <div id="info-peran-4" class="peran-info-content" style="display: none;">
+                            <p style="color: white; font-size: 1.1rem; margin: 0;"><strong>STRATEGI &
+                                    TEKNOLOGI:</strong> Eksekusi via algoritma canggih (Expert Advisor) yang mampu
+                                beradaptasi secara objektif, bebas emosi, dan merespon pasar dalam hitungan detik.</p>
+                        </div>
+
+                        <div id="info-peran-5" class="peran-info-content" style="display: none;">
+                            <p style="color: white; font-size: 1.1rem; margin: 0;"><strong>PERLINDUNGAN:</strong>
+                                Memastikan kepatuhan terhadap regulasi ekosistem keuangan resmi, memberikan transparansi
+                                penuh tanpa janji profit fiktif (bebas <em>scam</em>).</p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Slide 3: Wakil Penasihat Berjangka (WPA) -->
+        <section class="slide" id="slide-3">
+            <div class="slide-content" style="display: flex; flex-direction: column; gap: 1.5rem; height: 100%; padding-top: 1rem;">
+
+                <!-- Top Section -->
+                <div style="display: flex; gap: 2rem; align-items: stretch; flex: 1;">
+                    
+                    <!-- Top Left: Title & Desc -->
+                    <div style="flex: 1.5; display: flex; flex-direction: column; justify-content: center;">
+                        <h2 style="font-size: 2.3rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; color: white;">WAKIL PENASIHAT<br>BERJANGKA (WPA)</h2>
+                        <div style="background: rgba(0,0,0,0.3); border-left: 4px solid #8B5CF6; padding: 1.5rem; border-radius: 4px; margin-top: 1rem;">
+                            <p style="font-size: 1.2rem; color: #eee; line-height: 1.6; margin: 0;"><strong>Adalah :</strong> Profesional tersertifikasi yang berwenang memberikan edukasi, analisis, dan rekomendasi strategi perdagangan algoritmik di pasar derivatif maupun aset keuangan digital secara transparan.</p>
+                        </div>
+                    </div>
+
+                    <!-- Top Right: Daftar WPA -->
+                    <div style="flex: 1; display: flex; flex-direction: column;">
+                        <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; color: white; text-align: right;">SPECIALIST</h2>
+                        <div style="border: 2px solid var(--color-primary); border-radius: 8px; padding: 1.2rem; background: rgba(0,0,0,0.4); flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600; color: white;">Daftar Nama WPA :</h4>
+                            <ul style="font-size: 0.85rem; line-height: 1.4; color: #ccc; padding-left: 1.2rem; margin-bottom: 0; list-style-type: decimal;">
+                                <li class="wpa-link" data-wpa="Alit Widiastika, S.E.,M.H.,CFP" style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">Alit Widiastika, S.E.,M.H.,CFP (0005)</li>
+                                <li class="wpa-link" data-wpa="Sri Ardiansyah, S.Kom." style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">Sri Ardiansyah, S.Kom. (0004)</li>
+                                <li class="wpa-link" data-wpa="I Made Dwi Wijaya, ST." style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">I Made Dwi Wijaya, ST. (0006) - CUTI</li>
+                                <li class="wpa-link" data-wpa="I Putu Agi Sumara Jaya, S.T" style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">I Putu Agi Sumara Jaya, S.T (0019)</li>
+                                <li class="wpa-link" data-wpa="I Gusti Rai Bayu Pramana, S.E." style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">I Gusti Rai Bayu Pramana, S.E. (0016)</li>
+                                <li class="wpa-link" data-wpa="I Dewa Gede Sugiarta Putra, S.P" style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">I Dewa Gede Sugiarta Putra, S.P (0017)</li>
+                                <li class="wpa-link" data-wpa="I Gusti Bagus Aditya, S.P" style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">I Gusti Bagus Aditya, S.P (0018)</li>
+                                <li class="wpa-link" data-wpa="Aries Yuangga, S.Si" style="margin-bottom: 0.2rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='#ccc'">Aries Yuangga, S.Si (0015)</li>
+                                <li class="wpa-link" data-wpa="Lainnya" style="margin-top: 0.5rem; cursor: pointer; transition: color 0.2s; color: var(--color-primary); font-weight: bold; list-style: none;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--color-primary)'">+ 7 Spesialis Lainnya...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section: Roadmap Full Wide -->
+                <div style="flex: 0 0 auto; margin-top: auto;">
+                    <!-- Optional inner title to match the design perfectly -->
+                    <div style="text-align: center; margin-bottom: 0.5rem;">
+                        <h4 style="color: white; font-size: 1rem; margin: 0; font-weight: 500;">Roadmaps</h4>
+                        <h2 style="color: var(--color-primary); font-size: 1.5rem; margin: 0.2rem 0; font-weight: 800;">8 Tahap WPA</h2>
+                    </div>
+
+                    <div class="roadmap-container" style="padding: 1.5rem 1rem;">
+                        <div class="roadmap-line-wrapper">
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">01</div>
+                                <div class="roadmap-text">Almai |<br>Pendampingan</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">02</div>
+                                <div class="roadmap-text">Bursa ICDX |<br>Sertifikasi Multilateral</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">03</div>
+                                <div class="roadmap-text">LPK |<br>Pelatihan &<br>Sertifikasi PBK</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">04</div>
+                                <div class="roadmap-text">BNSP |<br>Sertifikasi<br>Kompetensi PBK</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">05</div>
+                                <div class="roadmap-text">BAPPEBTI |<br>Sertifikasi<br>Profesi-TLUP</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">06</div>
+                                <div class="roadmap-text">Almai |<br>BAPPEBTI |<br>Izin WPA</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">07</div>
+                                <div class="roadmap-text">Almai |<br>OJK |<br>Penasihat Investasi</div>
+                            </div>
+                            <div class="roadmap-step">
+                                <div class="roadmap-circle">08</div>
+                                <div class="roadmap-text">Almai |<br>BI |<br>Penasihat<br>Derivatif PUVA</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-info-box" style="margin-top: 0.5rem; padding: 0.5rem;">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+                        </svg>
+                        Alur pendaftaran hingga pengesahan resmi.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Penasihat Expert Advisor (EFFICIENT) -->
+        <section class="slide" id="slide-4">
+            <div class="slide-content"
+                style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 4rem; align-items: flex-start; height: 100%; padding-top: 2rem;">
+
+                <!-- Left Column -->
+                <div
+                    style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    <div>
+                        <div
+                            style="border: 2px solid #8B5CF6; padding: 1rem 1.5rem; display: inline-block; margin-bottom: 2rem;">
+                            <h2
+                                style="font-size: 2.2rem; font-weight: 700; line-height: 1.3; color: white; text-transform: uppercase; margin: 0;">
+                                PENASIHAT BERJANGKA<br>EXPERT ADVISOR</h2>
+                        </div>
+                        <p style="font-size: 1.3rem; color: white; line-height: 1.6; font-weight: 300;">Sebuah sistem
+                            perangkat lunak terprogram yang memberikan nasihat dan eksekusi strategi perdagangan secara
+                            otomatis di pasar derivatif maupun aset keuangan digital.</p>
+
+                        <div style="margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div
+                                style="display: flex; gap: 1.2rem; align-items: flex-start; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #8B5CF6;">
+                                <div style="font-size: 2rem;">🤖</div>
+                                <div>
+                                    <h4
+                                        style="color: #8B5CF6; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">
+                                        Eksekusi Otomatis (Algoritmik)</h4>
+                                    <p style="color: #ccc; font-size: 0.95rem; line-height: 1.5;">Menjalankan instruksi
+                                        transaksi secara presisi berdasarkan parameter logis dan historis yang telah
+                                        diuji ekstensif (backtesting).</p>
+                                </div>
+                            </div>
+
+                            <div
+                                style="display: flex; gap: 1.2rem; align-items: flex-start; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #8B5CF6;">
+                                <div style="font-size: 2rem;">⚡</div>
+                                <div>
+                                    <h4
+                                        style="color: #8B5CF6; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">
+                                        Respon Pasar Kecepatan Tinggi</h4>
+                                    <p style="color: #ccc; font-size: 0.95rem; line-height: 1.5;">Menganalisis
+                                        pergerakan harga seketika dan menangkap peluang profit sepersekian detik yang
+                                        tak terjangkau oleh trader manual.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+                    <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem; color: white;">EFFICIENT</h2>
+                    <div
+                        style="border: 2px solid var(--color-primary); border-radius: 12px; padding: 2.5rem 2rem; background: rgba(0,0,0,0.4); flex-grow: 1; margin-bottom: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                        <ul
+                            style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2rem;">
+                            <li
+                                style="display: flex; align-items: flex-start; gap: 1.2rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.5rem;">
+                                <span
+                                    style="color: var(--color-primary); font-size: 1.8rem; font-weight: 900; line-height: 1;">01</span>
+                                <div>
+                                    <strong
+                                        style="color: white; font-size: 1.2rem; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Pengawasan
+                                        24/7</strong>
+                                    <span style="color: #aaa; font-size: 0.95rem; line-height: 1.4;">Sistem bekerja
+                                        tanpa lelah menjaga portofolio melewati pergantian sesi pasar dunia.</span>
+                                </div>
+                            </li>
+                            <li
+                                style="display: flex; align-items: flex-start; gap: 1.2rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.5rem;">
+                                <span
+                                    style="color: var(--color-primary); font-size: 1.8rem; font-weight: 900; line-height: 1;">02</span>
+                                <div>
+                                    <strong
+                                        style="color: white; font-size: 1.2rem; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Bebas
+                                        Bias Emosional</strong>
+                                    <span style="color: #aaa; font-size: 0.95rem; line-height: 1.4;">Mengeliminasi
+                                        keserakahan (greed) & ketakutan (fear) demi menjaga konsistensi strategi.</span>
+                                </div>
+                            </li>
+                            <li
+                                style="display: flex; align-items: flex-start; gap: 1.2rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.5rem;">
+                                <span
+                                    style="color: var(--color-primary); font-size: 1.8rem; font-weight: 900; line-height: 1;">03</span>
+                                <div>
+                                    <strong
+                                        style="color: white; font-size: 1.2rem; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Manajemen
+                                        Risiko Disiplin</strong>
+                                    <span style="color: #aaa; font-size: 0.95rem; line-height: 1.4;">Eksekusi proteksi
+                                        kerugian (Stop Loss) yang matematis dan kaku tanpa ragu-ragu.</span>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 1.2rem;">
+                                <span
+                                    style="color: var(--color-primary); font-size: 1.8rem; font-weight: 900; line-height: 1;">04</span>
+                                <div>
+                                    <strong
+                                        style="color: white; font-size: 1.2rem; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Efisiensi
+                                        Waktu Optimal</strong>
+                                    <span style="color: #aaa; font-size: 0.95rem; line-height: 1.4;">Nasabah mendapatkan
+                                        hasil investasi maksimal tanpa harus terpaku menatap layar grafik
+                                        berjam-jam.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Ekosistem Industri Keuangan -->
+        <section class="slide" id="slide-5">
+            <div class="slide-content"
+                style="display: flex; flex-direction: column; height: 100%; gap: 1rem; padding-top: 1rem;">
+
+                <div class="diagram-intro"
+                    style="margin-bottom: 0; text-align: left; padding: 1.5rem; background: rgba(0,0,0,0.4); border: 2px solid #8B5CF6; border-radius: 8px;">
+                    <span class="slide-tag" style="margin-bottom: 0.5rem; display: inline-block;">STRUKTUR
+                        INDUSTRI</span>
+                    <h2 class="slide-heading" style="text-align: left; margin-bottom: 0.5rem; font-size: 2.2rem;">
+                        EKOSISTEM INDUSTRI KEUANGAN</h2>
+                    <p class="slide-desc" style="text-align: left; max-width: 100%;">Bagaimana posisi Penasihat
+                        Berjangka di antara trader dan pasar? Gunakan visual hub di bawah untuk melihat bagaimana kami
+                        menjembatani kedua ekosistem utama.</p>
+                </div>
+
+                <div style="display: flex; gap: 2rem; flex: 1;">
+                    <!-- Left: Hub Nodes -->
+                    <div
+                        style="flex: 1; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <div
+                            style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; max-width: 600px;">
+                            <div style="display: flex; flex-direction: column; gap: 2rem; justify-content: center;">
+                                <div
+                                    style="background: #222; border-radius: 12px; padding: 2rem; text-align: center; font-size: 1.5rem; font-weight: bold; color: white;">
+                                    TRADER</div>
+                                <div
+                                    style="background: #222; border-radius: 12px; padding: 2rem; text-align: center; font-size: 1.5rem; font-weight: bold; color: white;">
+                                    PENASIHAT</div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 2rem; justify-content: center;">
+                                <div
+                                    style="background: #222; border-radius: 12px; padding: 2rem 1rem; text-align: center; font-size: 1.3rem; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; height: 120px;">
+                                    EKOSISTEM DERIVATIF<br>KEUANGAN</div>
+                                <div
+                                    style="background: #222; border-radius: 12px; padding: 2rem 1rem; text-align: center; font-size: 1.3rem; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; height: 120px;">
+                                    EKOSISTEM ASET<br>KEUANGAN DIGITAL</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Comparison Grid -->
+                    <div
+                        style="flex: 1.2; display: flex; flex-direction: column; gap: 1rem; justify-content: space-between;">
+                        <!-- Derivatif -->
+                        <div class="comp-card glass-panel" style="margin:0; padding: 1.5rem;">
+                            <div class="comp-header" style="margin-bottom: 0.5rem;">
+                                <div class="comp-icon"
+                                    style="font-size: 1.2rem; width: 30px; height: 30px; display:flex; align-items:center; justify-content:center;">
+                                    📈</div>
+                                <h3 style="font-size: 1.2rem;">EKOSISTEM DERIVATIF</h3>
+                            </div>
+                            <ul class="comp-list" style="gap: 0.5rem; font-size: 0.9rem;">
+                                <li><span class="comp-label">Bentuk Aset:</span> Kontrak Berjangka / Derivatif</li>
+                                <li><span class="comp-label">Sistem Margin:</span> Transaksi Leverage (hanya jaminan
+                                    margin)</li>
+                                <li><span class="comp-label">Fokus Utama:</span> Hedging (Lindung Nilai) & Spekulasi
+                                </li>
+                                <li><span class="comp-label">Mekanisme:</span> Likuiditas melalui Pialang & Bursa</li>
+                                <li><span class="comp-label">Infrastruktur:</span> Bursa Berjangka & Kliring
+                                    Konvensional</li>
+                            </ul>
+                        </div>
+                        <!-- Digital -->
+                        <div class="comp-card glass-panel" style="margin:0; padding: 1.5rem;">
+                            <div class="comp-header" style="margin-bottom: 0.5rem;">
+                                <div class="comp-icon"
+                                    style="font-size: 1.2rem; width: 30px; height: 30px; background: #EAB308; color: black; display:flex; align-items:center; justify-content:center;">
+                                    🪙</div>
+                                <h3 style="font-size: 1.2rem;">ASET KEUANGAN DIGITAL</h3>
+                            </div>
+                            <ul class="comp-list" style="gap: 0.5rem; font-size: 0.9rem;">
+                                <li><span class="comp-label">Bentuk Aset:</span> Aset Digital Fisik / Kepemilikan Token
+                                </li>
+                                <li><span class="comp-label">Sistem Margin:</span> Kepemilikan Penuh (Spot) & Tokenisasi
+                                </li>
+                                <li><span class="comp-label">Fokus Utama:</span> Investasi Jangka Panjang & Utilitas
+                                </li>
+                                <li><span class="comp-label">Mekanisme:</span> Ledger Terdistribusi (Blockchain)</li>
+                                <li><span class="comp-label">Infrastruktur:</span> Bursa AKD & Kustodian Digital</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom: Explanation & Similarities -->
+                <div>
+                    <div
+                        style="background: #222; border-radius: 8px; padding: 1rem 1.5rem; font-size: 1.2rem; font-weight: bold; color: white; margin-bottom: 1rem;">
+                        Penjelasan
+                    </div>
+
+                    <div class="similarities-panel glass-panel" style="margin:0; padding: 1.5rem;">
+                        <h4
+                            style="font-size: 1rem; color: var(--color-primary); margin-bottom: 1rem; text-transform: uppercase;">
+                            PERSAMAAN ESENSIAL KEDUA EKOSISTEM</h4>
+                        <div class="sim-grid" style="grid-template-columns: repeat(5, 1fr); gap: 0.5rem;">
+                            <div class="sim-item"
+                                style="padding: 0.5rem; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); border-radius: 4px; justify-content: flex-start; gap: 0.5rem; line-height:1.2;">
+                                <span class="sim-check" style="color: var(--color-primary);">✓</span>
+                                <span>Diawasi penuh oleh regulator</span>
+                            </div>
+                            <div class="sim-item"
+                                style="padding: 0.5rem; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); border-radius: 4px; justify-content: flex-start; gap: 0.5rem; line-height:1.2;">
+                                <span class="sim-check" style="color: var(--color-primary);">✓</span>
+                                <span>Menyediakan bursa transaksi teratur</span>
+                            </div>
+                            <div class="sim-item"
+                                style="padding: 0.5rem; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); border-radius: 4px; justify-content: flex-start; gap: 0.5rem; line-height:1.2;">
+                                <span class="sim-check" style="color: var(--color-primary);">✓</span>
+                                <span>Menjamin kliring penyelesaian dana</span>
+                            </div>
+                            <div class="sim-item"
+                                style="padding: 0.5rem; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); border-radius: 4px; justify-content: flex-start; gap: 0.5rem; line-height:1.2;">
+                                <span class="sim-check" style="color: var(--color-primary);">✓</span>
+                                <span>Sangat memerlukan edukasi yang benar</span>
+                            </div>
+                            <div class="sim-item"
+                                style="padding: 0.5rem; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); border-radius: 4px; justify-content: flex-start; gap: 0.5rem; line-height:1.2;">
+                                <span class="sim-check" style="color: var(--color-primary);">✓</span>
+                                <span>Membutuhkan manajemen risiko ketat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Slide 6: Ekosistem Derivatif -->
+        <section class="slide" id="slide-6">
+            <div class="slide-content flow-slide">
+                <div class="slide-header">
+                    <span class="slide-tag">Ekosistem 1</span>
+                    <h2 class="slide-heading">EKOSISTEM DERIVATIF</h2>
+                    <p class="slide-desc">Struktur regulasi dan alur transaksi perdagangan berjangka komoditi.</p>
+                </div>
+
+                <div class="flow-interactive-wrapper">
+                    <!-- Regulator Full Width Card -->
+                    <div class="regulator-bar glass-panel" id="card-regulator" data-title="Regulator PBK & Keuangan"
+                        data-desc="Otoritas pengawas perdagangan berjangka komoditi dan sektor keuangan di Indonesia. Terdiri dari Bappebti (Kementerian Perdagangan) sebagai regulator utama PBK, OJK untuk perlindungan konsumen jasa keuangan, dan Bank Indonesia untuk sistem pembayaran.">
+                        <span>Regulator : BAPPEBTI, OJK, BANK INDONESIA</span>
+                    </div>
+
+                    <!-- Ecosystem Grid Columns -->
+                    <div class="ecosystem-cards-grid">
+                        <!-- Col 1 -->
+                        <div class="eco-col">
+                            <div class="eco-card glass-panel" id="card-trader" data-title="Trader (Trader)"
+                                data-desc="Trader (Nasabah) adalah individu atau korporasi yang menyetor dana margin dan melakukan transaksi jual/beli kontrak derivatif, baik untuk spekulasi profit maupun lindung nilai (hedging).">
+                                <div class="eco-card-title">TRADER</div>
+                            </div>
+                            <div class="eco-card glass-panel" id="card-penasihat" data-title="Penasihat Berjangka"
+                                data-desc="Penasihat Berjangka (seperti PT ALMA Indonesia Raya) bertindak sebagai konsultan profesional yang membimbing nasabah melalui edukasi, riset pasar, dan mitigasi risiko sebelum transaksi dilakukan.">
+                                <div class="eco-card-title">PENASIHAT</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 2 -->
+                        <div class="eco-col">
+                            <div class="eco-card tall glass-panel" id="card-pialang"
+                                data-title="Pialang & Margin Trading"
+                                data-desc="Pialang Berjangka (Broker) adalah perantara transaksi yang menyelenggarakan sistem margin trading nasabah, mengelola rekening terpisah (segregated account), dan mengeksekusi order nasabah ke bursa.">
+                                <div class="eco-card-title">PIALANG</div>
+                                <div class="eco-card-subtitle">MARGIN TRADING</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 3 -->
+                        <div class="eco-col">
+                            <div class="eco-card glass-panel" id="card-bursa" data-title="Bursa Berjangka"
+                                data-desc="Bursa Berjangka adalah lembaga resmi penyelenggara perdagangan kontrak berjangka secara teratur, wajar, efisien, dan transparan (misalnya Jakarta Futures Exchange / JFX dan ICDX).">
+                                <div class="eco-card-title">BURSA</div>
+                            </div>
+                            <div class="eco-card glass-panel" id="card-spa"
+                                data-title="SPA (Sistem Perdagangan Alternatif)"
+                                data-desc="Sistem Perdagangan Alternatif (SPA) adalah sarana transaksi derivatif bilateral di luar bursa (OTC) yang teratur dan diawasi ketat, di mana transaksi diselesaikan dengan Pedagang Berjangka.">
+                                <div class="eco-card-title">SPA</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 4 -->
+                        <div class="eco-col">
+                            <div class="eco-card tall glass-panel" id="card-kliring" data-title="Lembaga Kliring"
+                                data-desc="Lembaga Kliring Berjangka melakukan pendaftaran, penjaminan, kliring penyelesaian dana transaksi berjangka, serta memegang kendali penarikan dana margin jaminan dari pialang.">
+                                <div class="eco-card-title">KLIRING</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explanation Panel -->
+                    <div class="flow-description-box glass-panel" id="derivatif-desc-box">
+                        <h4 id="derivatif-desc-title" class="accent-text">Penjelasan</h4>
+                        <p id="derivatif-desc-text">Arahkan kursor atau klik pada salah satu komponen kartu di atas
+                            untuk melihat detail perannya dalam struktur ekosistem derivatif Indonesia.</p>
+                    </div>
+                </div>
+
+                <div class="products-features-grid">
+                    <!-- Perlindungan Trader Box (Slide 5) -->
+                    <div class="glass-panel"
+                        style="border-color: var(--color-primary); box-shadow: 0 0 15px rgba(51,232,24,0.1); padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; text-transform: uppercase;">PERLINDUNGAN
+                            TRADER</h4>
+                        <p style="font-size: 0.85rem; color: var(--color-text-sub); line-height: 1.5;">Di pasar
+                            derivatif yang menggunakan sistem margin, perlindungan berfokus pada transparansi harga di
+                            Bursa, penjaminan transaksi oleh Kliring, serta pemisahan dana nasabah (segregated account).
+                        </p>
+                    </div>
+
+                    <div class="products-box glass-panel">
+                        <h5>Produk Derivatif Utama</h5>
+                        <div class="tag-cloud">
+                            <span class="product-tag">Forex (Mata Uang)</span>
+                            <span class="product-tag">Emas (Gold)</span>
+                            <span class="product-tag">Komoditas Utama</span>
+                            <span class="product-tag">Indeks Saham</span>
+                            <span class="product-tag">Kontrak Futures</span>
+                            <span class="product-tag">Opsi (Options)</span>
+                        </div>
+                    </div>
+                    <div class="functions-box glass-panel">
+                        <h5>Fungsi Utama Industri</h5>
+                        <ul>
+                            <li><strong>Hedging (Lindung Nilai):</strong> Melindungi risiko perubahan harga fisik.</li>
+                            <li><strong>Price Discovery:</strong> Pembentukan harga pasar yang transparan di bursa.</li>
+                            <li><strong>Trading & Spekulasi:</strong> Memanfaatkan volatilitas harga global.</li>
+                            <li><strong>Manajemen Risiko:</strong> Diversifikasi alokasi aset.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Ekosistem Aset Keuangan Digital -->
+        <section class="slide" id="slide-7">
+            <div class="slide-content flow-slide">
+                <div class="slide-header">
+                    <span class="slide-tag">Ekosistem 2</span>
+                    <h2 class="slide-heading">EKOSISTEM ASET KEUANGAN DIGITAL (AKD)</h2>
+                    <p class="slide-desc">Infrastruktur baru berbasis blockchain untuk transaksi instrumen digital.</p>
+                </div>
+
+                <div class="flow-interactive-wrapper">
+                    <!-- Regulator Bar (Full-Width Card) -->
+                    <div class="regulator-bar glass-panel" id="digital-regulator"
+                        data-title="Regulator : OJK, BANK INDONESIA"
+                        data-desc="OJK & Bank Indonesia selaku otoritas pengawas tertinggi sektor keuangan dan sistem pembayaran digital untuk melindungi nasabah dan memitigasi risiko sistemik.">
+                        <span>Regulator : OJK, BANK INDONESIA</span>
+                    </div>
+
+                    <!-- Ecosystem Cards Grid -->
+                    <div class="ecosystem-cards-grid">
+                        <!-- Col 1 -->
+                        <div class="eco-col">
+                            <div class="eco-card glass-panel" id="digital-card-trader" data-title="Trader"
+                                data-desc="Trader melakukan transaksi jual-beli aset keuangan digital di pasar teratur demi meraih potensi keuntungan.">
+                                <div class="eco-card-title">TRADER</div>
+                            </div>
+                            <div class="eco-card glass-panel" id="digital-card-penasihat" data-title="Penasihat"
+                                data-desc="Penasihat memberikan jasa edukasi, nasihat investasi, dan analisis manajemen risiko transaksi aset digital bagi trader.">
+                                <div class="eco-card-title">PENASIHAT</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 2 -->
+                        <div class="eco-col">
+                            <div class="eco-card tall glass-panel" id="digital-card-pedagang"
+                                data-title="Pedagang AKD & Deposit Modal"
+                                data-desc="Pedagang Aset Keuangan Digital memfasilitasi transaksi perdagangan dan mewajibkan penyetoran deposit modal awal demi keamanan finansial dan likuiditas pasar.">
+                                <div class="eco-card-title" style="margin-bottom: 0.5rem;">PEDAGANG AKD</div>
+                                <div class="eco-card-subtitle"
+                                    style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">DEPOSIT MODAL</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 3 -->
+                        <div class="eco-col">
+                            <div class="eco-card glass-panel" id="digital-card-bursa" data-title="Bursa"
+                                data-desc="Bursa Aset Keuangan Digital menyelenggarakan platform transaksi terpusat yang aman, tertib, dan transparan bagi para pelaku pasar.">
+                                <div class="eco-card-title">BURSA</div>
+                            </div>
+                            <div class="eco-card glass-panel" id="digital-card-kliring" data-title="Kliring"
+                                data-desc="Lembaga Kliring menjamin penyelesaian hak dan kewajiban atas seluruh transaksi aset keuangan digital secara real-time dan terverifikasi.">
+                                <div class="eco-card-title">KLIRING</div>
+                            </div>
+                        </div>
+
+                        <!-- Col 4 -->
+                        <div class="eco-col">
+                            <div class="eco-card tall glass-panel" id="digital-card-kustodian" data-title="Kustodian"
+                                data-desc="Lembaga Kustodian menyediakan sarana penyimpanan cold/hot storage aset digital secara aman, terproteksi, serta mengelola private key milik pengguna.">
+                                <div class="eco-card-title">KUSTODIAN</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explanation Panel -->
+                    <div class="flow-description-box glass-panel" id="digital-desc-box">
+                        <h4 id="digital-desc-title" class="accent-text">Penjelasan</h4>
+                        <p id="digital-desc-text">Arahkan kursor atau klik pada salah satu komponen kartu di atas untuk
+                            melihat detail perannya dalam ekosistem aset keuangan digital.</p>
+                    </div>
+                </div>
+
+                <div class="products-features-grid">
+                    <!-- Perlindungan Trader Box (Slide 6) -->
+                    <div class="glass-panel"
+                        style="border-color: var(--color-primary); box-shadow: 0 0 15px rgba(51,232,24,0.1); padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; text-transform: uppercase;">PERLINDUNGAN
+                            TRADER</h4>
+                        <p style="font-size: 0.85rem; color: var(--color-text-sub); line-height: 1.5;">Di pasar kripto
+                            dengan volatilitas tinggi, perlindungan berfokus pada keamanan dompet digital (wallet) oleh
+                            Kustodian dan kepastian transaksi hanya pada instrumen digital yang terdaftar resmi.</p>
+                    </div>
+
+                    <div class="products-box glass-panel">
+                        <h5>Produk AKD</h5>
+                        <div class="tag-cloud">
+                            <span class="product-tag">Crypto Asset (BTC, ETH, dll)</span>
+                            <span class="product-tag">Stablecoin (USDT, USDC)</span>
+                            <span class="product-tag">Tokenisasi Aset RWA</span>
+                            <span class="product-tag">Instrumen Digital Regulatif</span>
+                        </div>
+                    </div>
+                    <div class="functions-box glass-panel">
+                        <h5>Karakteristik</h5>
+                        <ul>
+                            <li><strong>Teknologi Blockchain:</strong> Catatan transaksi immutable (tidak dapat diubah).
+                            </li>
+                            <li><strong>Transparansi Mutlak:</strong> Audit ledger terdistribusi yang terbuka secara
+                                publik.</li>
+                            <li><strong>Digital Settlement:</strong> Penyelesaian transaksi instan, efisien tanpa
+                                birokrasi.</li>
+                            <li><strong>Akses & Likuiditas Global:</strong> Berjalan 24/7 menjangkau pasar tanpa batas
+                                negara.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Slide 8: Penutup -->
+        <section class="slide" id="slide-8">
+            <div class="slide-content penutup-slide">
+                <div class="closing-quote-container">
+                    <h2 class="closing-title">INVESTASI CERDAS MULAI DARI PEMAHAMAN</h2>
+                    <blockquote class="closing-quote">
+                        "Edukasi yang tepat membangun trader yang cerdas, mandiri, dan berkelanjutan."
+                    </blockquote>
+                </div>
+
+                <div class="closing-grid">
+                    <div class="closing-intro-box card-panel">
+                        <h4>Mengapa ALMAI Hadir untuk Anda?</h4>
+                        <p>Kami percaya perlindungan dan keuntungan trader berjangka panjang hanya bisa dicapai bila
+                            dilandasi oleh kecakapan pemahaman yang matang.</p>
+                    </div>
+
+                    <div class="closing-points-container">
+                        <div class="closing-point">
+                            <div class="cp-bullet">🎓</div>
+                            <div class="cp-text">
+                                <strong>Meningkatkan Literasi Keuangan</strong>
+                                <p>Mengubah ketidaktahuan menjadi pemahaman investasi komprehensif.</p>
+                            </div>
+                        </div>
+                        <div class="closing-point">
+                            <div class="cp-bullet">📊</div>
+                            <div class="cp-text">
+                                <strong>Menganalisis Peluang Pasar</strong>
+                                <p>Menyaring kebisingan pasar menjadi wawasan data objektif terpercaya.</p>
+                            </div>
+                        </div>
+                        <div class="closing-point">
+                            <div class="cp-bullet">⚖️</div>
+                            <div class="cp-text">
+                                <strong>Menyajikan Risiko Objektif</strong>
+                                <p>Menghadirkan pemahaman resiko tanpa menyembunyikan sisi kerugian.</p>
+                            </div>
+                        </div>
+                        <div class="closing-point">
+                            <div class="cp-bullet">🤝</div>
+                            <div class="cp-text">
+                                <strong>Mendorong Keputusan Bertanggung Jawab</strong>
+                                <p>Melatih kemandirian keputusan transaksi trader jangka panjang.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pembuka Materi Inti -->
+                <div
+                    style="text-align: center; margin-top: 3rem; background: rgba(51, 232, 24, 0.1); border: 1px solid var(--color-primary); padding: 1.5rem; border-radius: 12px;">
+                    <h3
+                        style="color: var(--color-primary); font-size: 1.8rem; font-weight: bold; text-transform: uppercase;">
+                        MARI MASUK KE MATERI INTI PRESENTASI</h3>
+                    <p style="color: white; margin-top: 0.5rem; font-size: 1.1rem;">Memahami pasar untuk meraih peluang
+                        secara bijak dan komprehensif.</p>
+                </div>
+
+                <footer class="closing-footer">
+                    <p>&copy; 2026 PT ALMA Indonesia Raya. Seluruh Hak Cipta Dilindungi. Perusahaan Penasihat Berjangka
+                        Berlisensi Resmi.</p>
+                </footer>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar controls -->
+    <footer class="slide-controls-footer">
+        <div class="controls-left">
+            <button id="prev-btn" class="control-btn" aria-label="Previous Slide">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <span class="slide-progress-text"><span id="current-slide-num">1</span> / 8</span>
+            <button id="next-btn" class="control-btn" aria-label="Next Slide">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Interactive Slide Indicator dots -->
+        <div class="controls-center">
+            <div class="slide-indicators">
+                <span class="indicator active" data-slide="0"></span>
+                <span class="indicator" data-slide="1"></span>
+                <span class="indicator" data-slide="2"></span>
+                <span class="indicator" data-slide="3"></span>
+                <span class="indicator" data-slide="4"></span>
+                <span class="indicator" data-slide="5"></span>
+                <span class="indicator" data-slide="6"></span>
+                <span class="indicator" data-slide="7"></span>
+            </div>
+        </div>
+
+        <div class="controls-right">
+            <span class="keyboard-tip">Gunakan Tombol Arah / Spacebar</span>
+        </div>
+    </footer>
+
+    <!-- Progress Bar at the very bottom -->
+    <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Global Modal Pop Up for Certifications -->
+    <div id="cert-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 id="modal-title" style="color: white; margin-bottom: 1rem; text-align: center; font-size: 1.5rem;">
+                Sertifikasi</h3>
+            <div id="modal-body" style="text-align: center;">
+                <div
+                    style="border: 1px dashed rgba(255,255,255,0.2); padding: 3rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📄</span>
+                    <p style="color: #999; margin: 0; font-size: 1rem;">[Tempat Menampilkan Dokumen/Logo <span
+                            id="modal-cert-name" style="color: var(--color-primary); font-weight: bold;"></span>]</p>
+                    <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">Ganti kode ini dengan tag &lt;img
+                        src="..."&gt; dari sertifikat Anda jika sudah tersedia.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
