@@ -45,45 +45,60 @@
         </button>
       </div>
 
-      <nav class="sidebar-menu">
-        <div class="menu-label">Navigasi Utama</div>
-        <a href="#calendar-dashboard" class="nav-link active">
-          <div class="nav-link-content">
-            <i class="fas fa-calendar-days"></i>
-            <span>Executive Calendar</span>
-          </div>
-          <span class="nav-badge info">Utama</span>
+      <nav class="sidebar-menu" id="executiveNavigation">
+        <div class="menu-label">Menu Utama</div>
+        <a href="#dashboard" class="nav-link active" data-view="dashboard">
+          <div class="nav-link-content"><i class="fas fa-house"></i><span>Dashboard</span></div>
+        </a>
+        <a href="#briefing" class="nav-link" data-view="briefing">
+          <div class="nav-link-content"><i class="fas fa-newspaper"></i><span>CEO Briefing</span></div>
+        </a>
+        <a href="#calendar" class="nav-link" data-view="calendar">
+          <div class="nav-link-content"><i class="fas fa-calendar-days"></i><span>Kalender</span></div>
+        </a>
+        <a href="#tasks" class="nav-link" data-view="tasks">
+          <div class="nav-link-content"><i class="fas fa-list-check"></i><span>Tugas</span></div>
+          <span class="nav-badge info">5</span>
+        </a>
+        <a href="#approvals" class="nav-link" data-view="approvals">
+          <div class="nav-link-content"><i class="fas fa-clipboard-check"></i><span>Approval</span></div>
+          <span class="nav-badge urgent" id="sidebarApprBadge">3</span>
+        </a>
+        <a href="#reminders" class="nav-link" data-view="reminders">
+          <div class="nav-link-content"><i class="fas fa-bell"></i><span>Reminder</span></div>
+        </a>
+        <a href="#meetings" class="nav-link" data-view="meetings">
+          <div class="nav-link-content"><i class="fas fa-video"></i><span>Meeting</span></div>
+        </a>
+        <a href="#ai-summary" class="nav-link" data-view="ai-summary">
+          <div class="nav-link-content"><i class="fas fa-robot"></i><span>AI Summary</span></div>
+          <span class="nav-badge ai">AI</span>
+        </a>
+        <a href="#notifications" class="nav-link" data-view="notifications">
+          <div class="nav-link-content"><i class="fas fa-bullhorn"></i><span>Notification</span></div>
+          <span class="nav-badge urgent">3</span>
         </a>
 
-        <div class="menu-label">Aksi & Keputusan</div>
-        <a href="#" class="nav-link" onclick="openBatchApprovalModal(); return false;">
-          <div class="nav-link-content">
-            <i class="fas fa-signature"></i>
-            <span>Batch Approval</span>
-          </div>
-          <span class="nav-badge urgent" id="sidebarApprBadge">2</span>
+        <div class="menu-label">Insight Eksekutif</div>
+        <a href="#performance" class="nav-link" data-view="performance">
+          <div class="nav-link-content"><i class="fas fa-chart-line"></i><span>Kinerja</span></div>
+        </a>
+        <a href="#finance" class="nav-link" data-view="finance">
+          <div class="nav-link-content"><i class="fas fa-file-invoice-dollar"></i><span>Kas, Invoice & Tagihan</span></div>
+        </a>
+        <a href="#crm" class="nav-link" data-view="crm">
+          <div class="nav-link-content"><i class="fas fa-comments"></i><span>CRM Snapshot</span></div>
+        </a>
+        <a href="#okr" class="nav-link" data-view="okr">
+          <div class="nav-link-content"><i class="fas fa-bullseye"></i><span>OKR & Sasaran</span></div>
+        </a>
+        <a href="#audit" class="nav-link" data-view="audit">
+          <div class="nav-link-content"><i class="fas fa-clock-rotate-left"></i><span>Audit Trail</span></div>
         </a>
 
-        <a href="#" class="nav-link" onclick="openOfficialInvoiceModal('INV-AWS-2026-08-882'); return false;">
-          <div class="nav-link-content">
-            <i class="fas fa-file-invoice"></i>
-            <span>Faktur & Invoice</span>
-          </div>
-        </a>
-
-        <a href="#" class="nav-link" onclick="openExecutiveReportModal(); return false;">
-          <div class="nav-link-content">
-            <i class="fas fa-chart-pie"></i>
-            <span>Laporan Ringkas</span>
-          </div>
-        </a>
-
-        <div class="menu-label">Pengaturan</div>
-        <a href="#" class="nav-link" onclick="openModal('ceoProfileModal'); return false;">
-          <div class="nav-link-content">
-            <i class="fas fa-sliders"></i>
-            <span>Profil & Delegasi</span>
-          </div>
+        <div class="menu-label">Akun</div>
+        <a href="#profile" class="nav-link" data-action="profile">
+          <div class="nav-link-content"><i class="fas fa-sliders"></i><span>Profil & Delegasi</span></div>
         </a>
       </nav>
 
@@ -116,7 +131,7 @@
             <i class="fas fa-bars"></i>
           </button>
           <div class="greeting-text">
-            <h1>Executive Calendar Dashboard</h1>
+            <h1 id="pageTitle">CEO Executive Dashboard</h1>
             <p id="liveDateText">Memuat tanggal...</p>
           </div>
         </div>
@@ -162,10 +177,10 @@
         </div>
       </header>
 
-      <!-- =======================================================
-           3. HERO CALENDAR DASHBOARD (MAIN & ONLY DASHBOARD)
-           ======================================================= -->
-      <section id="calendar-dashboard" class="calendar-dashboard-section">
+      <section id="demoViewContainer" class="executive-view-container" aria-live="polite"></section>
+
+      <!-- Interactive calendar module -->
+      <section id="calendar-dashboard" class="calendar-dashboard-section demo-hidden">
         <div class="dash-card calendar-hero-card">
           <div class="ceo-card-header">
             <div class="card-title-group">
