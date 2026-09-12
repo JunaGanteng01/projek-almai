@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   attachEventListeners();
   initCommandPalette();
   updateTopbarBadges();
+  initExecutiveNavigation();
 });
 
 /* -------------------------------------------------------------
@@ -1143,3 +1144,245 @@ function attachEventListeners() {
     });
   }
 }
+
+/* -------------------------------------------------------------
+   Complete Executive Suite Demo Navigation & Views
+   ------------------------------------------------------------- */
+const EXECUTIVE_PAGE_META = {
+  dashboard: ['CEO Executive Dashboard', 'house'],
+  briefing: ['CEO Briefing', 'newspaper'],
+  calendar: ['Executive Calendar', 'calendar-days'],
+  tasks: ['Tugas Eksekutif', 'list-check'],
+  approvals: ['Approval Center', 'clipboard-check'],
+  reminders: ['Executive Reminder', 'bell'],
+  meetings: ['Meeting Center', 'video'],
+  'ai-summary': ['AI Executive Summary', 'robot'],
+  notifications: ['Notification Center', 'bullhorn'],
+  performance: ['Kinerja Perusahaan', 'chart-line'],
+  finance: ['Kas, Invoice & Tagihan', 'file-invoice-dollar'],
+  crm: ['CRM Snapshot', 'comments'],
+  okr: ['OKR & Sasaran Strategis', 'bullseye'],
+  audit: ['Audit Trail', 'clock-rotate-left']
+};
+
+const DEMO_TASKS = [
+  { title: 'Finalisasi roadmap produk Q4', owner: 'Rian · CTO', due: 'Hari ini, 16:00', status: 'Berjalan', progress: 72, color: '#33e818' },
+  { title: 'Review draft MOU mitra institusi', owner: 'Dimas · Business', due: '13 Sep 2026', status: 'Review CEO', progress: 88, color: '#3b82f6' },
+  { title: 'Rekonsiliasi komisi mentor WPA', owner: 'Anita · CFO', due: '14 Sep 2026', status: 'Menunggu', progress: 54, color: '#f59e0b' },
+  { title: 'Audit keamanan Trade Engine', owner: 'Security Squad', due: '16 Sep 2026', status: 'Terjadwal', progress: 35, color: '#8b5cf6' },
+  { title: 'Onboarding VP Engineering', owner: 'Sarah · HR', due: '18 Sep 2026', status: 'Siap', progress: 92, color: '#06b6d4' }
+];
+
+function initExecutiveNavigation() {
+  document.querySelectorAll('#executiveNavigation .nav-link').forEach(link => {
+    link.addEventListener('click', event => {
+      const view = link.dataset.view;
+      const action = link.dataset.action;
+      if (view || action) event.preventDefault();
+      if (view) showExecutiveView(view);
+      if (action === 'profile') window.openModal('ceoProfileModal');
+    });
+  });
+
+  window.addEventListener('hashchange', () => {
+    const view = location.hash.replace('#', '');
+    if (EXECUTIVE_PAGE_META[view]) showExecutiveView(view, false);
+  });
+
+  const initialView = EXECUTIVE_PAGE_META[location.hash.replace('#', '')]
+    ? location.hash.replace('#', '')
+    : 'dashboard';
+  showExecutiveView(initialView, false);
+}
+
+window.showExecutiveView = function(view, updateHash = true) {
+  if (!EXECUTIVE_PAGE_META[view]) view = 'dashboard';
+  const container = document.getElementById('demoViewContainer');
+  const calendar = document.getElementById('calendar-dashboard');
+  const pageTitle = document.getElementById('pageTitle');
+  const quickBar = document.getElementById('quickActionBar');
+
+  document.querySelectorAll('#executiveNavigation .nav-link').forEach(link => {
+    link.classList.toggle('active', link.dataset.view === view);
+  });
+
+  if (pageTitle) pageTitle.textContent = EXECUTIVE_PAGE_META[view][0];
+  if (calendar) calendar.classList.toggle('demo-hidden', view !== 'calendar');
+  if (container) {
+    container.classList.toggle('demo-hidden', view === 'calendar');
+    if (view !== 'calendar') container.innerHTML = renderExecutivePage(view);
+  }
+  if (quickBar) quickBar.style.display = ['dashboard', 'calendar'].includes(view) ? '' : 'none';
+
+  if (updateHash && location.hash !== `#${view}`) history.pushState(null, '', `#${view}`);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const sidebar = document.getElementById('ceoSidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (sidebar) sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+};
+
+function renderExecutivePage(view) {
+  const renderers = {
+    dashboard: renderDemoDashboard,
+    briefing: renderDemoBriefing,
+    tasks: renderDemoTasks,
+    approvals: renderDemoApprovals,
+    reminders: renderDemoReminders,
+    meetings: renderDemoMeetings,
+    'ai-summary': renderDemoAiSummary,
+    notifications: renderDemoNotifications,
+    performance: renderDemoPerformance,
+    finance: renderDemoFinance,
+    crm: renderDemoCrm,
+    okr: renderDemoOkr,
+    audit: renderDemoAudit
+  };
+  return (renderers[view] || renderDemoDashboard)();
+}
+
+function demoHero(eyebrow, title, description, actions = '') {
+  return `<div class="demo-hero">
+    <div class="demo-status-row"><span class="demo-status live">Data aktual</span><span class="demo-status">Bulan berjalan · 01 Sep–12 Sep 2026</span></div>
+    <div class="demo-hero-top">
+      <div><div class="demo-eyebrow">${eyebrow}</div><h2>${title}</h2><p>${description}</p></div>
+      <div class="demo-actions">${actions}</div>
+    </div>
+  </div>`;
+}
+
+function demoButton(icon, label, action, primary = false) {
+  return `<button class="demo-button${primary ? ' primary' : ''}" onclick="${action}"><i class="fas fa-${icon}"></i>${label}</button>`;
+}
+
+function metricCard(label, value, detail, icon, color = '#33e818', tone = '') {
+  return `<article class="demo-metric" style="--metric-color:${color}">
+    <i class="fas fa-${icon} demo-metric-icon"></i><div class="demo-metric-label">${label}</div>
+    <div class="demo-metric-value">${value}</div><div class="demo-metric-detail ${tone}">${detail}</div>
+  </article>`;
+}
+
+function sectionHeading(kicker, title, note = '') {
+  return `<div class="demo-section-heading"><div><div class="demo-eyebrow">${kicker}</div><h3>${title}</h3></div><span class="demo-section-note">${note}</span></div>`;
+}
+
+function renderDemoDashboard() {
+  return `<div class="executive-page">
+    ${demoHero('Executive Command Center', 'Keputusan penting terlihat jelas, tanpa tenggelam dalam data operasional.', 'Diperbarui 12 Sep 2026, 13:24 · Seluruh angka pada demo ini adalah data simulasi.',
+      demoButton('magnifying-glass', 'Cari', 'toggleCommandPalette()') + demoButton('calendar-days', 'Kalender', "showExecutiveView('calendar')") + demoButton('file-excel', 'Ekspor Excel', 'exportExecutiveReportExcel()', true))}
+    <section class="demo-section">${sectionHeading('Ringkasan 10 Detik', 'Executive Pulse', 'Arahkan kursor ke kartu untuk melihat detail')}
+      <div class="demo-metric-grid">
+        ${metricCard('Pendapatan', 'Rp 2,84 M', '↑ 18,4% dari bulan lalu', 'arrow-trend-up', '#33e818', 'good')}
+        ${metricCard('Kas & Bank', 'Rp 5,33 M', 'Saldo buku jurnal saat ini', 'building-columns', '#60a5fa')}
+        ${metricCard('Butuh Keputusan', '3 approval', 'Rp 136,5 jt · 1 overdue', 'signature', '#f59e0b', 'warn')}
+        ${metricCard('Risiko Aktif', '3 alert', '1 SLA CRM · 2 invoice overdue', 'triangle-exclamation', '#fb7185', 'bad')}
+        ${metricCard('Pengguna Baru', '1.284', '↑ 24,8% · conversion sehat', 'users', '#06b6d4', 'good')}
+        ${metricCard('Konversi', '8,7%', 'Target bulan ini 10%', 'bullseye', '#8b5cf6')}
+        ${metricCard('Event Mendatang', '6 event', '1.420 peserta terdaftar', 'microphone', '#d946ef')}
+        ${metricCard('Pencairan', '12 pending', 'Rp 218,4 jt dalam antrean', 'money-bill-transfer', '#fb923c', 'warn')}
+      </div>
+    </section>
+    <section class="demo-section demo-grid-main">
+      <div class="demo-card"><div class="demo-card-header"><div><h3>Tren Pendapatan & Aktivitas</h3><p class="demo-card-subtitle">Performa enam bulan terakhir</p></div><span class="demo-badge green">+18,4%</span></div>
+        <div class="demo-chart">${[48,62,57,73,69,91,83,96].map((h,i)=>`<div class="demo-chart-bar" style="--height:${h}%;--bar-color:${i===7?'#33e818':'#1f8f18'}"><span>${['Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep'][i]}</span></div>`).join('')}</div>
+      </div>
+      <div class="demo-card"><div class="demo-card-header"><div><h3>Keputusan Prioritas</h3><p class="demo-card-subtitle">Membutuhkan perhatian CEO</p></div>${demoButton('arrow-right','Lihat Semua',"showExecutiveView('approvals')")}</div>
+        <div class="demo-list">
+          ${appState.data.approvals.filter(a=>a.status==='pending').slice(0,3).map(a=>`<div class="demo-list-item"><div class="demo-list-icon" style="--item-color:${a.iconColor}"><i class="fas ${a.icon}"></i></div><div class="demo-list-copy"><strong>${a.title}</strong><span>${a.requester} · ${a.amount}</span></div><span class="demo-badge amber">${a.urgency}</span></div>`).join('')}
+        </div>
+      </div>
+    </section>
+    <section class="demo-section demo-grid-3">
+      <div class="demo-card"><h3>Agenda Hari Ini</h3><p class="demo-card-subtitle">2 agenda utama · 1 hybrid</p><div class="demo-list"><div class="demo-list-item"><div class="demo-list-icon"><i class="fas fa-video"></i></div><div class="demo-list-copy"><strong>Rapat Pleno Direksi Q3</strong><span>14:00 · Boardroom HQ & Google Meet</span></div><span class="demo-badge green">90 mnt</span></div><div class="demo-list-item"><div class="demo-list-icon" style="--item-color:#f43f5e"><i class="fas fa-file-signature"></i></div><div class="demo-list-copy"><strong>Penandatanganan MOU</strong><span>16:30 · Menara Mandiri Jakarta</span></div></div></div></div>
+      <div class="demo-card"><h3>Kesehatan Operasional</h3><p class="demo-card-subtitle">Status unit bisnis hari ini</p><div class="demo-list">${[['Payment Gateway','99,98%','green'],['Trade Engine','98,72%','green'],['WhatsApp SLA','91,20%','amber'],['CRM Response','87,40%','red']].map(x=>`<div class="demo-row-between"><span style="font-size:10px;color:var(--text-secondary)">${x[0]}</span><span class="demo-badge ${x[2]}">${x[1]}</span></div>`).join('')}</div></div>
+      <div class="demo-card"><div class="demo-callout ai"><strong><i class="fas fa-wand-magic-sparkles text-accent"></i> AI Executive Insight</strong><p>Pertumbuhan pendaftaran meningkat 24,8%, tetapi SLA respons CRM turun. Prioritaskan penambahan shift CS sebelum kampanye webinar berikutnya.</p></div><div class="demo-list"><div class="demo-list-item"><div class="demo-list-icon" style="--item-color:#8b5cf6"><i class="fas fa-lightbulb"></i></div><div class="demo-list-copy"><strong>Rekomendasi hari ini</strong><span>Alihkan 2 agen ke antrean high-value leads.</span></div></div></div></div>
+    </section>
+  </div>`;
+}
+
+function renderDemoBriefing() {
+  return `<div class="executive-page">${demoHero('Morning Intelligence', 'Briefing ringkas sebelum keputusan pertama.', 'Prioritas, perubahan penting, dan risiko disusun otomatis untuk CEO.', demoButton('volume-high','Putar Briefing',"demoAction('Briefing suara diputar dalam mode demo')",true))}
+    <div class="demo-grid-main"><div class="demo-card"><h3>Briefing · Sabtu, 12 September 2026</h3><div class="demo-list">
+      ${[['Pertumbuhan di atas target','Akuisisi pengguna mencapai 124% dari target mingguan.','#33e818','arrow-trend-up'],['Keputusan mendesak','Tiga pengajuan senilai Rp 136,5 juta menunggu otorisasi.','#f59e0b','signature'],['Risiko layanan CRM','SLA respons melewati 15 menit pada jam sibuk.','#f43f5e','triangle-exclamation'],['Peluang kemitraan','Draft MOU institusi siap masuk tahap legal review.','#3b82f6','handshake']].map(x=>`<div class="demo-list-item"><div class="demo-list-icon" style="--item-color:${x[2]}"><i class="fas fa-${x[3]}"></i></div><div class="demo-list-copy"><strong>${x[0]}</strong><span>${x[1]}</span></div></div>`).join('')}
+    </div></div><div class="demo-card"><h3>Fokus CEO Hari Ini</h3><div class="demo-timeline"><div class="demo-timeline-item"><strong>09:30 · Review arus kas</strong><p>Validasi runway dan pencairan vendor.</p></div><div class="demo-timeline-item" style="--item-color:#3b82f6"><strong>14:00 · Rapat Pleno Direksi</strong><p>Roadmap Q4 dan target pertumbuhan.</p></div><div class="demo-timeline-item" style="--item-color:#f43f5e"><strong>16:30 · Penandatanganan MOU</strong><p>Finalisasi kerja sama institusi.</p></div></div></div></div>
+  </div>`;
+}
+
+function renderDemoTasks() {
+  const columns = [
+    ['Prioritas', DEMO_TASKS.slice(0,2), '#f43f5e'],
+    ['Sedang Berjalan', DEMO_TASKS.slice(2,4), '#3b82f6'],
+    ['Siap Ditinjau', DEMO_TASKS.slice(4), '#33e818']
+  ];
+  return `<div class="executive-page">${demoHero('Execution Control', 'Tugas strategis terpantau dari satu tempat.', 'Delegasikan, tinjau progres, dan tuntaskan hambatan lintas divisi.', demoButton('plus','Tambah Tugas',"demoAction('Form tugas baru dibuka')",true))}<div class="demo-kanban">${columns.map(col=>`<div class="demo-kanban-column"><div class="demo-kanban-title"><span>${col[0]}</span><span class="demo-badge">${col[1].length}</span></div>${col[1].map(t=>`<div class="demo-task-card" onclick="demoAction('Detail tugas: ${t.title}')"><strong>${t.title}</strong><p>${t.owner} · ${t.due}</p><div class="demo-progress" style="--progress:${t.progress}%;--bar-color:${t.color}"><span></span></div><div class="demo-progress-meta"><span>${t.status}</span><b>${t.progress}%</b></div></div>`).join('')}</div>`).join('')}</div></div>`;
+}
+
+function renderDemoApprovals() {
+  const rows = appState.data.approvals.map(a=>`<tr><td><strong>${a.title}</strong><br><span>${a.requester}</span></td><td>${a.department}</td><td><strong>${a.amount}</strong></td><td><span class="demo-badge ${a.status==='pending'?'amber':'green'}">${a.status==='pending'?'Menunggu':'Disetujui'}</span></td><td>${a.status==='pending'?`<button class="demo-button primary" onclick="demoApprovalDecision('${a.id}')">Setujui</button>`:'—'}</td></tr>`).join('');
+  return `<div class="executive-page">${demoHero('Decision Queue', 'Approval Center', 'Setiap keputusan memiliki pemilik, nilai, urgensi, dan jejak audit.', demoButton('layer-group','Batch Approval','openBatchApprovalModal()',true))}<div class="demo-metric-grid">${metricCard('Menunggu','3','1 melewati SLA','hourglass-half','#f59e0b','warn')}${metricCard('Nilai Antrean','Rp 136,5 jt','Butuh keputusan CEO','money-bill-wave','#60a5fa')}${metricCard('Disetujui Bulan Ini','28','Median 3 jam 14 menit','circle-check','#33e818','good')}${metricCard('Ditolak','2','Dokumen tidak lengkap','circle-xmark','#fb7185')}</div><section class="demo-section demo-card">${sectionHeading('Daftar Keputusan','Pengajuan Terbaru','Klik Setujui untuk simulasi')}<div class="demo-table-wrap"><table class="demo-table"><thead><tr><th>Pengajuan</th><th>Divisi</th><th>Nilai</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table></div></section></div>`;
+}
+
+function renderDemoReminders() {
+  return `<div class="executive-page">${demoHero('Personal Control', 'Tidak ada tenggat penting yang terlewat.', 'Reminder pribadi dan otomatis dari seluruh modul eksekutif.', demoButton('plus','Tambah Reminder',"demoAction('Form reminder baru dibuka')",true))}<div class="demo-grid-3">${[['Hari ini','Review laporan kas harian','09:30','#f43f5e'],['Hari ini','Konfirmasi kehadiran rapat pleno','13:30','#f59e0b'],['Besok','Tinjau MOU kemitraan korporasi','10:00','#3b82f6'],['14 Sep','Persetujuan payroll & komisi','08:30','#33e818'],['16 Sep','Audit keamanan triwulanan','14:00','#8b5cf6'],['18 Sep','Evaluasi OKR tengah bulan','15:30','#06b6d4']].map(x=>`<div class="demo-card"><div class="demo-row-between"><span class="demo-badge">${x[0]}</span><i class="fas fa-bell" style="color:${x[3]}"></i></div><h3 style="margin-top:20px">${x[1]}</h3><p class="demo-card-subtitle">${x[2]} WIB · Pengingat otomatis</p><div class="demo-actions" style="margin-top:18px">${demoButton('check','Tandai Selesai',"demoAction('Reminder ditandai selesai')")}</div></div>`).join('')}</div></div>`;
+}
+
+function renderDemoMeetings() {
+  return `<div class="executive-page">${demoHero('Executive Collaboration', 'Meeting Center', 'Agenda rapat, peserta, materi, dan tindak lanjut tersimpan dalam satu alur.', demoButton('plus','Buat Meeting',"demoAction('Form meeting baru dibuka')",true))}<div class="demo-grid-main"><div class="demo-card"><h3>Meeting Berikutnya</h3><div class="demo-callout" style="margin-top:15px"><span class="demo-badge green">Mulai 38 menit lagi</span><strong style="margin-top:14px;font-size:18px">Rapat Pleno Direksi Q3</strong><p>14:00–15:30 WIB · Boardroom HQ & Google Meet Hybrid</p><div class="demo-actions" style="margin-top:16px">${demoButton('video','Masuk Rapat',"demoAction('Ruang rapat demo dibuka')",true)}${demoButton('folder-open','Buka Materi',"demoAction('Materi rapat ditampilkan')")}</div></div></div><div class="demo-card"><h3>Peserta</h3><div class="demo-avatar-stack" style="margin-top:18px"><div class="demo-avatar">HP</div><div class="demo-avatar">RS</div><div class="demo-avatar">AW</div><div class="demo-avatar">DK</div><div class="demo-avatar">+3</div></div><div class="demo-list"><div class="demo-list-item"><div class="demo-list-copy"><strong>7 peserta dikonfirmasi</strong><span>5 hadir langsung · 2 melalui Google Meet</span></div></div></div></div></div><section class="demo-section demo-card">${sectionHeading('Jadwal','Meeting Mendatang')}<div class="demo-table-wrap"><table class="demo-table"><thead><tr><th>Waktu</th><th>Meeting</th><th>Pemilik</th><th>Peserta</th><th>Status</th></tr></thead><tbody><tr><td>Hari ini · 14:00</td><td><strong>Rapat Pleno Direksi Q3</strong></td><td>CEO Office</td><td>7 orang</td><td><span class="demo-badge green">Confirmed</span></td></tr><tr><td>14 Sep · 10:30</td><td><strong>Weekly Product Review</strong></td><td>CTO</td><td>9 orang</td><td><span class="demo-badge blue">Online</span></td></tr><tr><td>16 Sep · 15:00</td><td><strong>Finance Steering Committee</strong></td><td>CFO</td><td>5 orang</td><td><span class="demo-badge amber">Tentative</span></td></tr></tbody></table></div></section></div>`;
+}
+
+function renderDemoAiSummary() {
+  return `<div class="executive-page">${demoHero('ALMAI Intelligence', 'AI merangkum sinyal terpenting untuk keputusan Anda.', 'Analisis lintas keuangan, pengguna, layanan, CRM, dan agenda eksekutif.', demoButton('arrows-rotate','Buat Ulang Summary',"demoAction('AI Summary diperbarui dari data demo')",true))}<div class="demo-grid-main"><div class="demo-card"><div class="demo-callout ai"><strong><i class="fas fa-robot"></i> Ringkasan Eksekutif</strong><p>ALMAI mencatat momentum pertumbuhan positif dengan pendapatan naik 18,4% dan 1.284 pengguna baru. Risiko utama berada pada penurunan SLA CRM serta dua invoice yang mendekati jatuh tempo. Sistem menyarankan persetujuan tambahan kapasitas server sebelum webinar akbar untuk menjaga reliabilitas layanan.</p></div><div class="demo-list">${[['Peluang','Konversi kampanye WPA naik 2,1 poin.','#33e818'],['Risiko','Respons lead premium melambat pada pukul 19:00–21:00.','#f43f5e'],['Rekomendasi','Setujui capacity scaling dan tambah dua agen malam.','#3b82f6']].map(x=>`<div class="demo-list-item"><div class="demo-list-icon" style="--item-color:${x[2]}"><i class="fas fa-wand-magic-sparkles"></i></div><div class="demo-list-copy"><strong>${x[0]}</strong><span>${x[1]}</span></div></div>`).join('')}</div></div><div class="demo-card"><h3>Confidence Score</h3><div style="font-size:52px;font-weight:900;color:#33e818;margin:22px 0 4px">92%</div><p class="demo-card-subtitle">Berdasarkan kelengkapan 14 sumber data</p><div class="demo-progress" style="--progress:92%"><span></span></div><div class="demo-list"><div class="demo-row-between"><span class="demo-section-note">Keuangan</span><span class="demo-badge green">Lengkap</span></div><div class="demo-row-between"><span class="demo-section-note">CRM</span><span class="demo-badge green">Lengkap</span></div><div class="demo-row-between"><span class="demo-section-note">Market eksternal</span><span class="demo-badge amber">Terlambat 8m</span></div></div></div></div></div>`;
+}
+
+function renderDemoNotifications() {
+  const items = appState.data.notifications.slice(0,6);
+  return `<div class="executive-page">${demoHero('Signal & Alerts', 'Notification Center', 'Pemberitahuan diprioritaskan berdasarkan dampak, urgensi, dan kewenangan.', demoButton('check-double','Tandai Semua Dibaca',"demoAction('Semua notifikasi ditandai dibaca')",true))}<div class="demo-card"><div class="demo-list">${items.map(n=>`<div class="demo-list-item"><div class="demo-list-icon" style="--item-color:${n.color||'#33e818'}"><i class="fas ${n.icon||'fa-bell'}"></i></div><div class="demo-list-copy"><strong>${n.title}</strong><span>${n.time} · ${n.categoryName}</span></div><span class="demo-badge ${n.unread?'red':'green'}">${n.unread?'Baru':'Dibaca'}</span></div>`).join('')}</div></div></div>`;
+}
+
+function renderDemoPerformance() {
+  return `<div class="executive-page">${demoHero('Performance Intelligence', 'Kinerja perusahaan terhadap target strategis.', 'Pantau pertumbuhan, profitabilitas, kualitas layanan, dan produktivitas.', demoButton('download','Unduh Laporan',"demoAction('Laporan kinerja disiapkan')",true))}<div class="demo-metric-grid">${metricCard('Revenue Growth','18,4%','Target 15%','arrow-trend-up','#33e818','good')}${metricCard('Gross Margin','64,2%','↑ 3,1 poin','chart-pie','#60a5fa','good')}${metricCard('Customer NPS','71','Kategori excellent','face-smile','#8b5cf6','good')}${metricCard('Team Productivity','87%','Target 85%','people-group','#06b6d4','good')}</div><section class="demo-section demo-grid-2"><div class="demo-card"><h3>Target vs Realisasi</h3><div class="demo-list">${[['Pendapatan Bulanan',84],['Akuisisi Pengguna',92],['Retensi Member',78],['Kemitraan Institusi',68],['SLA Layanan',87]].map(x=>`<div><div class="demo-row-between"><span style="font-size:10px">${x[0]}</span><b style="font-size:10px">${x[1]}%</b></div><div class="demo-progress" style="--progress:${x[1]}%"><span></span></div></div>`).join('')}</div></div><div class="demo-card"><h3>Performa Unit Bisnis</h3><div class="demo-chart">${[72,88,61,93,79,84].map((h,i)=>`<div class="demo-chart-bar" style="--height:${h}%;--bar-color:${['#33e818','#3b82f6','#f59e0b','#8b5cf6','#06b6d4','#fb7185'][i]}"><span>${['Edu','WPA','AIWE','CRM','Event','Ops'][i]}</span></div>`).join('')}</div></div></section></div>`;
+}
+
+function renderDemoFinance() {
+  const bills = (appState.data.bills || []).slice(0,5);
+  return `<div class="executive-page">${demoHero('Financial Control', 'Kas, invoice, dan kewajiban dalam satu pandangan.', 'Angka terhubung dengan jurnal, pembayaran, dan approval.', demoButton('file-invoice','Lihat Faktur',"openOfficialInvoiceModal('INV-AWS-2026-08-882')")+demoButton('file-excel','Ekspor',"demoAction('Laporan keuangan diekspor')",true))}<div class="demo-metric-grid">${metricCard('Saldo Kas','Rp 5,33 M','Across 6 rekening','building-columns','#33e818')}${metricCard('Arus Kas Masuk','Rp 1,28 M','Bulan berjalan','arrow-down','#60a5fa','good')}${metricCard('Arus Kas Keluar','Rp 742 jt','58% dari inflow','arrow-up','#f59e0b')}${metricCard('Tagihan Terbuka','Rp 218 jt','2 melewati jatuh tempo','file-circle-exclamation','#fb7185','bad')}</div><section class="demo-section demo-grid-main"><div class="demo-card"><h3>Arus Kas 8 Minggu</h3><div class="demo-chart">${[56,70,62,82,68,91,76,88].map((h,i)=>`<div class="demo-chart-bar" style="--height:${h}%;--bar-color:${i%2?'#33e818':'#176d16'}"><span>W${i+1}</span></div>`).join('')}</div></div><div class="demo-card"><h3>Tagihan Prioritas</h3><div class="demo-list">${(bills.length?bills:[{vendor:'AWS Cloud',amount:'Rp 18.750.000',dueDate:'13 Sep'},{vendor:'Biznet',amount:'Rp 4.300.000',dueDate:'14 Sep'},{vendor:'Cloudflare',amount:'Rp 7.850.000',dueDate:'18 Sep'}]).map(b=>`<div class="demo-list-item"><div class="demo-list-icon" style="--item-color:#f59e0b"><i class="fas fa-receipt"></i></div><div class="demo-list-copy"><strong>${b.vendor||b.title||'Vendor'}</strong><span>${b.amount||b.total||'Rp 0'} · ${b.dueDate||b.date||'Segera'}</span></div></div>`).join('')}</div></div></section></div>`;
+}
+
+function renderDemoCrm() {
+  return `<div class="executive-page">${demoHero('Customer Intelligence', 'CRM Snapshot', 'Pantau pipeline, respons tim, sentimen, dan peluang bernilai tinggi.', demoButton('filter','Atur Segment',"demoAction('Filter CRM dibuka')",true))}<div class="demo-metric-grid">${metricCard('Lead Aktif','3.482','↑ 16% bulan ini','address-book','#33e818','good')}${metricCard('High-value Lead','184','Potensi Rp 920 jt','gem','#8b5cf6')}${metricCard('Avg. Response','12m 48s','Target di bawah 10m','stopwatch','#f59e0b','warn')}${metricCard('Closing Rate','22,6%','↑ 2,4 poin','handshake','#60a5fa','good')}</div><section class="demo-section demo-grid-main"><div class="demo-card"><h3>Pipeline Penjualan</h3><div class="demo-list">${[['New Leads',3482,100,'#3b82f6'],['Qualified',1720,71,'#06b6d4'],['Consultation',864,48,'#8b5cf6'],['Proposal',421,30,'#f59e0b'],['Won',189,18,'#33e818']].map(x=>`<div><div class="demo-row-between"><span style="font-size:10px">${x[0]}</span><b style="font-size:10px">${x[1].toLocaleString('id-ID')}</b></div><div class="demo-progress" style="--progress:${x[2]}%;--bar-color:${x[3]}"><span></span></div></div>`).join('')}</div></div><div class="demo-card"><h3>Alert SLA</h3><div class="demo-list"><div class="demo-list-item"><div class="demo-list-icon" style="--item-color:#f43f5e"><i class="fas fa-user-clock"></i></div><div class="demo-list-copy"><strong>18 lead belum direspons</strong><span>6 lead premium · antrean malam</span></div><span class="demo-badge red">Overdue</span></div><div class="demo-list-item"><div class="demo-list-icon" style="--item-color:#f59e0b"><i class="fas fa-face-meh"></i></div><div class="demo-list-copy"><strong>Sentimen turun 4%</strong><span>Keluhan dominan: waktu respons</span></div></div></div></div></section></div>`;
+}
+
+function renderDemoOkr() {
+  return `<div class="executive-page">${demoHero('Strategy Execution', 'OKR & Sasaran Strategis', 'Hubungkan target perusahaan dengan realisasi setiap unit.', demoButton('plus','Tambah Objective',"demoAction('Form objective baru dibuka')",true))}<div class="demo-grid-3">${[
+    ['O1 · Pertumbuhan Berkelanjutan','Mencapai 25.000 pengguna aktif dan revenue Rp 12 miliar.',84,'#33e818',['Pengguna aktif 21.420','Revenue YTD Rp 9,8 M','Retention 82%']],
+    ['O2 · Operational Excellence','Menjaga SLA layanan dan reliabilitas platform di atas target.',76,'#3b82f6',['Uptime 99,94%','Response time 12m','NPS 71']],
+    ['O3 · Institutional Expansion','Membangun kemitraan strategis berskala nasional.',68,'#8b5cf6',['4 MOU aktif','2 pilot institusi','Pipeline Rp 3,4 M']]
+  ].map(o=>`<div class="demo-card"><span class="demo-badge" style="color:${o[3]}">${o[0].split(' · ')[0]}</span><h3 style="margin-top:15px">${o[0].split(' · ')[1]}</h3><p class="demo-card-subtitle" style="min-height:42px">${o[1]}</p><div class="demo-progress" style="--progress:${o[2]}%;--bar-color:${o[3]}"><span></span></div><div class="demo-progress-meta"><span>Progress</span><b>${o[2]}%</b></div><div class="demo-list">${o[4].map(k=>`<div class="demo-row-between"><span style="font-size:9px;color:var(--text-secondary)">${k}</span><i class="fas fa-circle-check" style="color:${o[3]};font-size:9px"></i></div>`).join('')}</div></div>`).join('')}</div></div>`;
+}
+
+function renderDemoAudit() {
+  const logs = [
+    ['13:24:08','CEO','Membuka Executive Dashboard','Dashboard','Berhasil','#33e818'],
+    ['13:18:42','Anita W.','Mengirim approval pencairan komisi','Finance','Menunggu','#f59e0b'],
+    ['12:55:17','Rian S.','Memperbarui proposal server cluster','Technology','Tercatat','#3b82f6'],
+    ['11:31:02','CEO','Menyetujui MOU kemitraan institusi','Approval','Berhasil','#33e818'],
+    ['10:44:33','System','Sinkronisasi CRM dan billing selesai','Integration','Berhasil','#06b6d4'],
+    ['09:12:16','Security Bot','Login CEO terverifikasi dengan MFA','Security','Aman','#8b5cf6']
+  ];
+  return `<div class="executive-page">${demoHero('Governance & Control', 'Audit Trail', 'Jejak aktivitas penting transparan, terurut, dan siap ditinjau.', demoButton('download','Ekspor Audit',"demoAction('Audit trail diekspor')",true))}<div class="demo-card"><div class="demo-table-wrap"><table class="demo-table"><thead><tr><th>Waktu</th><th>Pelaku</th><th>Aktivitas</th><th>Modul</th><th>Status</th></tr></thead><tbody>${logs.map(l=>`<tr><td>${l[0]}</td><td><strong>${l[1]}</strong></td><td>${l[2]}</td><td>${l[3]}</td><td><span class="demo-badge" style="color:${l[5]}">${l[4]}</span></td></tr>`).join('')}</tbody></table></div></div></div>`;
+}
+
+window.demoAction = function(message) {
+  window.showToast('success', `${message} — simulasi berhasil`);
+};
+
+window.demoApprovalDecision = function(approvalId) {
+  const approval = appState.data.approvals.find(item => item.id === approvalId);
+  if (!approval || approval.status !== 'pending') return;
+  approval.status = 'approved';
+  approval.approvedAt = 'Baru saja · Demo CEO';
+  updateTopbarBadges();
+  document.getElementById('demoViewContainer').innerHTML = renderDemoApprovals();
+  window.showToast('success', 'Pengajuan berhasil disetujui dalam mode demo');
+};
